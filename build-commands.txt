@@ -1,8 +1,8 @@
 likec4 export png -o ./diagrams
 likec4 build --output-single-file -o ./assets
 likec4 export png -f "use-case*" --sequence -o ./diagrams
-asciidoctor -b html5 "FDS HLD.adoc"
-asciidoctor -b docbook "FDS HLD.adoc"
-pandoc -r docbook -t docx --number-sections -o "FDS HLD.docx" "FDS HLD.xml" --toc --toc-depth=5
-asciidoctor-pdf "FDS HLD.adoc"
+asciidoctor -b html5 "HLD.adoc"
+asciidoctor -b docbook "HLD.adoc"
+pandoc -r docbook -t docx --number-sections -o "HLD.docx" "HLD.xml" --toc --toc-depth=5
+asciidoctor-pdf "HLD.adoc"
 pandoc FDS_HLD_CloudArchitecture.docx -f docx -t asciidoc -o output.adoc

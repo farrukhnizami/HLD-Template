@@ -161,7 +161,6 @@ NOTE: This should contain Purpose of AI (Use Case), Approved use of AI, Securing
 |===
 |*ID*   |*Type*     |*Risk / Debt*  |*Level*    |*Mitigation*
 |       |           |               |           |
-|       |           |               |           |
 |===
 
 === Application Business Criticality Rating

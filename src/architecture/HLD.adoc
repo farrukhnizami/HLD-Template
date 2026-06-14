@@ -21,18 +21,14 @@ _A worked-example reference document for Solution Architects across Royal Mail_
 [width="100%",cols="35%,65%",options="header",]
 |===
 |*Field* |*Value*
-|Document Title |FDS Processing Sites - High-Level Design
-|Version |1.0
-|Status |Draft for Review
-|Author a|
-Rashu Khanna (Solution Architect)
-
-Farrukh Nizami (Lead Solution Architect)
-
-|Document Owner |ART Programme
+|Document Title |
+|Version |
+|Status |
+|Author |
+|Document Owner |
 |Classification |Template for Internal Use
-|Source Requirements |Processing - High Level Requirements (MDS++_++MVP)
-|Template |arc42 v9.0-EN
+|Source Requirements |
+|Template |HLD v0.1
 |===
 
 :toc: left

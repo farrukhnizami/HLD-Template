@@ -32,4 +32,5 @@ measures to minimize, mitigate or avoid risks or reduce technical debts._
 [width="100%",cols="10%,10%,35%,10%,35%",options="header",]
 |===
 |*ID* |*Type* |*Risk / Debt* |*Level* |*Mitigation*
+|       |       |           |       |
 |===

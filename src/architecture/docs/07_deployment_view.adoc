@@ -55,6 +55,7 @@ _See_ https://docs.arc42.org/section-7/[Deployment View] _in the arc42 documenta
 [width="100%",cols="20%,34%,46%",options="header",]
 |===
 |*Environment* |*Purpose* |*Notes*
+|              |          |
 |===
 
 ==== Application Components to Infrastructure Components Mapping
@@ -64,6 +65,7 @@ _See_ https://docs.arc42.org/section-7/[Deployment View] _in the arc42 documenta
 [width="100%",cols="24%,32%,44%",options="header",]
 |===
 |*Tier* |*Components* |*Building blocks hosted*
+|       |             |
 |===
 
 ==== Quality and performance features:

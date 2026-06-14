@@ -1,0 +1,2328 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?asciidoc-toc?>
+<?asciidoc-numbered?>
+<article xmlns="http://docbook.org/ns/docbook" xmlns:xl="http://www.w3.org/1999/xlink" version="5.0" xml:lang="en">
+<info>
+<title>High-Level Design - Front Line Demand &amp; Supply (FDS)</title>
+<date>2026-06-14</date>
+</info>
+<informalfigure>
+<mediaobject>
+<imageobject>
+<imagedata fileref="images/royalmaillogo.png" contentwidth="166" contentdepth="128" align="center"/>
+</imageobject>
+<textobject><phrase>Royal Mail Logo</phrase></textobject>
+</mediaobject>
+</informalfigure>
+<simpara role="text-center"><emphasis role="strong">Royal Mail Group</emphasis></simpara>
+<simpara role="text-center"><emphasis role="strong"><emphasis>Processing Sites Implementation</emphasis></emphasis></simpara>
+<simpara role="text-center"><emphasis>Based on the arc42 Template, v9.0</emphasis></simpara>
+<simpara><emphasis>A worked-example reference document for Solution Architects across Royal Mail</emphasis></simpara>
+<informaltable frame="all" rowsep="1" colsep="1">
+<?dbhtml table-width="100%"?>
+<?dbfo table-width="100%"?>
+<?dblatex table-width="100%"?>
+<tgroup cols="2">
+<colspec colname="col_1" colwidth="148.75*"/>
+<colspec colname="col_2" colwidth="276.25*"/>
+<thead>
+<row>
+<entry align="left" valign="top"><emphasis role="strong">Field</emphasis></entry>
+<entry align="left" valign="top"><emphasis role="strong">Value</emphasis></entry>
+</row>
+</thead>
+<tbody>
+<row>
+<entry align="left" valign="top"><simpara>Document Title</simpara></entry>
+<entry align="left" valign="top"></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara>Version</simpara></entry>
+<entry align="left" valign="top"></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara>Status</simpara></entry>
+<entry align="left" valign="top"></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara>Author</simpara></entry>
+<entry align="left" valign="top"></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara>Document Owner</simpara></entry>
+<entry align="left" valign="top"></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara>Classification</simpara></entry>
+<entry align="left" valign="top"><simpara>Template for Internal Use</simpara></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara>Source Requirements</simpara></entry>
+<entry align="left" valign="top"></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara>Template</simpara></entry>
+<entry align="left" valign="top"><simpara>HLD v0.1</simpara></entry>
+</row>
+</tbody>
+</tgroup>
+</informaltable>
+<simpara><?asciidoc-pagebreak?></simpara>
+<section xml:id="_introduction_and_goals">
+<title>Introduction and Goals</title>
+<simpara><emphasis>Describes the relevant requirements and the driving forces that the software architects and development team must consider:</emphasis></simpara>
+<itemizedlist>
+<listitem>
+<simpara>Underlying business goals</simpara>
+</listitem>
+<listitem>
+<simpara>Essential features and functional requirements</simpara>
+</listitem>
+<listitem>
+<simpara>Quality goals for the architecture</simpara>
+</listitem>
+<listitem>
+<simpara>Relevant stakeholders and their expectations.</simpara>
+</listitem>
+</itemizedlist>
+<section xml:id="_requirements_overview">
+<title>Requirements Overview</title>
+<simpara><emphasis>Short description of the functional requirements, driving forces, extract or abstract of requirements. Link to existing requirements documents with version numbers.</emphasis></simpara>
+<simpara><emphasis role="strong">Contents</emphasis></simpara>
+<simpara><emphasis>Short description of the functional requirements, driving forces, extract (or abstract) of requirements. Link to (hopefully existing) requirements documents (with version number and information where to find it).</emphasis></simpara>
+<simpara><emphasis role="strong">Motivation</emphasis></simpara>
+<simpara><emphasis>From the point of view of the end users a system is created or modified to improve support of a business activity and/or improve the quality.</emphasis></simpara>
+<simpara><emphasis role="strong">Form</emphasis></simpara>
+<simpara><emphasis>Short textual description, probably in tabular use-case format. If requirements documents exist this overview should refer to these documents.
+Keep these excerpts as short as possible. Balance readability of this document with potential redundancy w.r.t to requirements documents.</emphasis></simpara>
+</section>
+<section xml:id="_quality_goals">
+<title>Quality Goals</title>
+<simpara><emphasis role="strong">Contents</emphasis></simpara>
+<simpara><emphasis>The top three (max five) quality goals for the architecture whose fulfillment is of highest importance to the major stakeholders. We really mean quality goals for the architecture. Don’t confuse them with project goals. They are not necessarily identical.</emphasis></simpara>
+<simpara><emphasis role="strong">Motivation</emphasis></simpara>
+<simpara><emphasis>You should know the quality goals of your most important stakeholders, since they will influence fundamental architectural decisions. Make sure to be very concrete about these qualities, avoid buzzwords. If you as an architect do not know how the quality of your work will be judged…</emphasis></simpara>
+<simpara><emphasis role="strong">Form</emphasis></simpara>
+<simpara><emphasis>A table with quality goals and concrete scenarios, ordered by priorities</emphasis></simpara>
+</section>
+<section xml:id="_stakeholders">
+<title>Stakeholders</title>
+<simpara><emphasis role="strong">Content</emphasis></simpara>
+<simpara><emphasis>Explicit overview of stakeholders - all persons, roles or organizations that</emphasis></simpara>
+<itemizedlist>
+<listitem>
+<simpara>should know the architecture</simpara>
+</listitem>
+<listitem>
+<simpara>have to be convinced of the architecture</simpara>
+</listitem>
+<listitem>
+<simpara>have to work with the architecture or with code</simpara>
+</listitem>
+<listitem>
+<simpara>need the documentation of the architecture for their work</simpara>
+</listitem>
+<listitem>
+<simpara>have to come up with decisions about the system or its development</simpara>
+</listitem>
+</itemizedlist>
+<simpara><emphasis role="strong">Motivation</emphasis></simpara>
+<simpara><emphasis>You should know all parties involved in development of the system or
+affected by the system. Otherwise, you may get nasty surprises later in
+the development process. These stakeholders determine the extent and the
+level of detail of your work and its results.</emphasis></simpara>
+<simpara><emphasis role="strong">Form</emphasis></simpara>
+<simpara><emphasis>Table with role names, person names, and their expectations with respect
+to the architecture and its documentation.</emphasis></simpara>
+<simpara><emphasis role="strong">Further Information</emphasis></simpara>
+<simpara><emphasis>See</emphasis> <link xl:href="https://docs.arc42.org/section-1/">Introduction and Goals</link> <emphasis>in the
+arc42 documentation.</emphasis></simpara>
+<informaltable frame="all" rowsep="1" colsep="1">
+<?dbhtml table-width="100%"?>
+<?dbfo table-width="100%"?>
+<?dblatex table-width="100%"?>
+<tgroup cols="3">
+<colspec colname="col_1" colwidth="85*"/>
+<colspec colname="col_2" colwidth="170*"/>
+<colspec colname="col_3" colwidth="170*"/>
+<thead>
+<row>
+<entry align="left" valign="top">Role/Name</entry>
+<entry align="left" valign="top">Contact</entry>
+<entry align="left" valign="top">Expectations</entry>
+</row>
+</thead>
+<tbody>
+<row>
+<entry align="left" valign="top"><simpara><emphasis>&lt;Role-1&gt;</emphasis></simpara></entry>
+<entry align="left" valign="top"><simpara><emphasis>&lt;Contact-1&gt;</emphasis></simpara></entry>
+<entry align="left" valign="top"><simpara><emphasis>&lt;Expectation-1&gt;</emphasis></simpara></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara><emphasis>&lt;Role-2&gt;</emphasis></simpara></entry>
+<entry align="left" valign="top"><simpara><emphasis>&lt;Contact-2&gt;</emphasis></simpara></entry>
+<entry align="left" valign="top"><simpara><emphasis>&lt;Expectation-2&gt;</emphasis></simpara></entry>
+</row>
+</tbody>
+</tgroup>
+</informaltable>
+<simpara><?asciidoc-pagebreak?></simpara>
+</section>
+</section>
+<section xml:id="_architecture_constraints">
+<title>Architecture Constraints</title>
+<simpara><emphasis role="strong">Contents</emphasis></simpara>
+<simpara><emphasis>Any requirement that constraints software architects in their freedom of
+design and implementation decisions or decision about the development
+process. These constraints sometimes go beyond individual systems and
+are valid for whole organizations and companies.</emphasis></simpara>
+<simpara><emphasis role="strong">Motivation</emphasis></simpara>
+<simpara><emphasis>Architects should know exactly where they are free in their design
+decisions and where they must adhere to constraints. Constraints must
+always be dealt with; they may be negotiable, though.</emphasis></simpara>
+<simpara><emphasis role="strong">Form</emphasis></simpara>
+<simpara><emphasis>Simple tables of constraints with explanations. If needed you can
+subdivide them into technical constraints, organizational and political
+constraints and conventions (e.g. programming or versioning guidelines,
+documentation or naming conventions)</emphasis></simpara>
+<simpara><emphasis role="strong">Further Information</emphasis></simpara>
+<simpara><emphasis>See</emphasis> <link xl:href="https://docs.arc42.org/section-2/">Architecture Constraints</link> <emphasis>in the
+arc42 documentation.</emphasis></simpara>
+<section xml:id="_technical_constraints">
+<title>Technical Constraints</title>
+
+</section>
+<section xml:id="_organisational_political_constraints">
+<title>Organisational &amp; Political Constraints</title>
+
+</section>
+<section xml:id="_conventions">
+<title>Conventions</title>
+<simpara><?asciidoc-pagebreak?></simpara>
+</section>
+</section>
+<section xml:id="_context_and_scope">
+<title>Context and Scope</title>
+<simpara><emphasis role="strong">Contents</emphasis></simpara>
+<simpara><emphasis>Context and scope - as the name suggests - delimits your system (i.e.
+your scope) from all its communication partners (neighboring systems and
+users, i.e. the context of your system). It thereby specifies the
+external interfaces.</emphasis></simpara>
+<simpara><emphasis>If necessary, differentiate the business context (domain specific inputs
+and outputs) from the technical context (channels, protocols, hardware).</emphasis></simpara>
+<simpara><emphasis role="strong">Motivation</emphasis></simpara>
+<simpara><emphasis>The domain interfaces and technical interfaces to communication partners
+are among your system’s most critical aspects. Make sure that you
+completely understand them.</emphasis></simpara>
+<simpara><emphasis role="strong">Form</emphasis></simpara>
+<simpara><emphasis>Various options:</emphasis></simpara>
+<itemizedlist>
+<listitem>
+<simpara>Context diagrams</simpara>
+</listitem>
+<listitem>
+<simpara>Lists of communication partners and their interfaces.</simpara>
+</listitem>
+</itemizedlist>
+<section xml:id="_business_context">
+<title>Business Context</title>
+<simpara><emphasis role="strong">Contents</emphasis></simpara>
+<simpara><emphasis>Specification of <emphasis role="strong">all</emphasis> communication partners (users, IT-systems, …​)
+with explanations of domain specific inputs and outputs or interfaces.
+Optionally you can add domain specific formats or communication
+protocols.</emphasis></simpara>
+<simpara><emphasis>We need to put context diagram from C4 model but more oriented around
+interaction between business capability provide by the current system
+and other organizational business capabilities</emphasis></simpara>
+<simpara><emphasis role="strong">Motivation</emphasis></simpara>
+<simpara><emphasis>All stakeholders should understand which data are exchanged with the
+environment of the system.</emphasis></simpara>
+<simpara><emphasis role="strong">Form</emphasis></simpara>
+<simpara><emphasis>All kinds of diagrams that show the system as a black box and specify
+the domain interfaces to communication partners.</emphasis></simpara>
+<simpara><emphasis>Alternatively (or additionally) you can use a table. The title of the
+table is the name of your system, the three columns contain the name of
+the communication partner, the inputs, and the outputs.</emphasis></simpara>
+<simpara><emphasis role="strong">&lt;Diagram or Table&gt;</emphasis></simpara>
+<simpara><emphasis role="strong">&lt;optionally: Explanation of external domain interfaces&gt;</emphasis></simpara>
+<section xml:id="_business_context_diagram">
+<title>Business Context - Diagram</title>
+<simpara><emphasis>A C4-style System Context diagram should be inserted here in production usage.</emphasis></simpara>
+</section>
+</section>
+<section xml:id="_technical_context">
+<title>Technical Context</title>
+<simpara><emphasis role="strong">Contents</emphasis></simpara>
+<simpara><emphasis>Technical interfaces (channels and transmission media) linking your
+system to its environment. In addition a mapping of domain specific
+input/output to the channels, i.e. an explanation which I/O uses which
+channel.</emphasis></simpara>
+<simpara><emphasis>We need to put context diagram from C4 model but more oriented around
+interaction between the current system and other RMG systems and
+external systems.</emphasis></simpara>
+<important>
+<simpara>We must ALSO include <emphasis role="strong"><phrase role="red">Big Picture</phrase></emphasis> here</simpara>
+</important>
+<simpara><emphasis role="strong">Motivation</emphasis></simpara>
+<simpara><emphasis>Many stakeholders make architectural decision based on the technical
+interfaces between the system and its context. Especially infrastructure
+or hardware designers decide these technical interfaces.</emphasis></simpara>
+<simpara><emphasis role="strong">Form</emphasis></simpara>
+<simpara><emphasis>E.g. UML deployment diagram describing channels to neighboring systems,
+together with a mapping table showing the relationships between channels
+and input/output.</emphasis></simpara>
+<simpara><emphasis role="strong">&lt;Diagram or Table&gt;</emphasis></simpara>
+<simpara><emphasis role="strong">&lt;Optionally: Explanation of technical interfaces&gt;</emphasis></simpara>
+<simpara><emphasis role="strong">&lt;Mapping Input/Output to Channels&gt;</emphasis></simpara>
+<important>
+<simpara>Conceptual diagram is replaced with business and technical context
+diagrams. We will use Context diagrams from C4 model here.</simpara>
+</important>
+<simpara><emphasis role="strong">Further Information</emphasis></simpara>
+<simpara><emphasis>See</emphasis> <link xl:href="https://docs.arc42.org/section-3/">Context and Scope</link> <emphasis>in the arc42
+documentation.</emphasis></simpara>
+<section xml:id="_technical_context_diagram">
+<title>Technical Context - Diagram</title>
+<simpara><?asciidoc-pagebreak?></simpara>
+</section>
+</section>
+</section>
+<section xml:id="_solution_strategy">
+<title>Solution Strategy</title>
+<simpara><emphasis role="strong">Contents</emphasis></simpara>
+<simpara><emphasis>A short summary and explanation of the fundamental decisions and
+solution strategies, that shape system architecture. It includes</emphasis></simpara>
+<itemizedlist>
+<listitem>
+<simpara>technology decisions</simpara>
+</listitem>
+<listitem>
+<simpara>decisions about the top-level decomposition of the system, e.g. usage
+of an architectural pattern or design pattern</simpara>
+</listitem>
+<listitem>
+<simpara>decisions on how to achieve key quality goals</simpara>
+</listitem>
+<listitem>
+<simpara>relevant organizational decisions, e.g. selecting a development
+process or delegating certain tasks to third parties.</simpara>
+</listitem>
+</itemizedlist>
+<simpara><emphasis role="strong">Motivation</emphasis></simpara>
+<simpara><emphasis>These decisions form the cornerstones for your architecture. They are
+the foundation for many other detailed decisions or implementation
+rules.</emphasis></simpara>
+<simpara><emphasis role="strong">Form</emphasis></simpara>
+<simpara><emphasis>Keep the explanations of such key decisions short.</emphasis></simpara>
+<simpara><emphasis>Motivate what was decided and why it was decided that way, based upon
+problem statement, quality goals and key constraints. Refer to details
+in the following sections.</emphasis></simpara>
+<simpara><emphasis role="strong">Further Information</emphasis></simpara>
+<simpara><emphasis>See</emphasis> <link xl:href="https://docs.arc42.org/section-4/">Solution Strategy</link> <emphasis>in the arc42
+documentation.</emphasis></simpara>
+<simpara><?asciidoc-pagebreak?></simpara>
+</section>
+<section xml:id="_building_block_view">
+<title>Building Block View</title>
+<simpara><emphasis role="strong">Content</emphasis></simpara>
+<simpara><emphasis>The building block view shows the static decomposition of the system
+into building blocks (modules, components, subsystems, classes,
+interfaces, packages, libraries, frameworks, layers, partitions, tiers,
+functions, macros, operations, data structures, …​) as well as their
+dependencies (relationships, associations, …​)</emphasis></simpara>
+<important>
+<simpara>This view is mandatory for every architecture documentation. In analogy
+to a house this is the <emphasis role="strong"><phrase role="red">Floor Plan</phrase></emphasis>.</simpara>
+</important>
+<simpara><emphasis>Since it contains static view of the system, we need to put container
+and component diagrams (C2 &amp; C3) from C4 model. It only shows the
+relationships between various containers, components and external
+systems (Both internal &amp; external to RMG)</emphasis></simpara>
+<simpara><emphasis>This section should also contain Integration Architecture (Reference to
+ICDs etc.)</emphasis></simpara>
+<simpara><emphasis role="strong">Motivation</emphasis></simpara>
+<simpara><emphasis>Maintain an overview of your source code by making its structure
+understandable through abstraction.</emphasis></simpara>
+<simpara><emphasis>This allows you to communicate with your stakeholder on an abstract
+level without disclosing implementation details.</emphasis></simpara>
+<simpara><emphasis role="strong">Further Information</emphasis></simpara>
+<simpara><emphasis>See</emphasis> <link xl:href="https://docs.arc42.org/section-5/">Building Block View</link> <emphasis>in the arc42 documentation.</emphasis></simpara>
+<section xml:id="_container_diagram">
+<title>Container Diagram</title>
+
+</section>
+<section xml:id="_component_diagram_backend_components">
+<title>Component Diagram (Backend Components)</title>
+<simpara><?asciidoc-pagebreak?></simpara>
+</section>
+</section>
+<section xml:id="_runtime_view">
+<title>Runtime View</title>
+<simpara><emphasis role="strong">Contents</emphasis></simpara>
+<simpara><emphasis>The runtime view describes concrete behavior and interactions of the
+system’s building blocks in form of scenarios from the following areas:</emphasis></simpara>
+<itemizedlist>
+<listitem>
+<simpara>important use cases or features: how do building blocks execute them?</simpara>
+</listitem>
+<listitem>
+<simpara>interactions at critical external interfaces: how do building blocks
+cooperate with users and neighboring systems?</simpara>
+</listitem>
+<listitem>
+<simpara>operation and administration: launch, start-up, stop</simpara>
+</listitem>
+<listitem>
+<simpara>error and exception scenarios</simpara>
+</listitem>
+</itemizedlist>
+<tip>
+<simpara>The main criterion for the choice of possible scenarios
+(sequences, workflows) is their <emphasis role="strong">architectural relevance</emphasis>. It is <emphasis role="strong">not</emphasis>
+important to describe a large number of scenarios. You should rather
+document a representative selection.</simpara>
+</tip>
+<simpara><emphasis role="strong">Motivation</emphasis></simpara>
+<simpara><emphasis>You should understand how (instances of) building blocks of your system
+perform their job and communicate at runtime. You will mainly capture
+scenarios in your documentation to communicate your architecture to
+stakeholders that are less willing or able to read and understand the
+static models (building block view, deployment view).</emphasis></simpara>
+<simpara><emphasis role="strong">Form</emphasis></simpara>
+<simpara><emphasis>Following diagrams could be part of this section:</emphasis></simpara>
+<itemizedlist>
+<listitem>
+<simpara><emphasis role="strong">System Landscape Diagram (C4 Model)</emphasis></simpara>
+</listitem>
+<listitem>
+<simpara><emphasis role="strong">Activity Diagrams and Sequence Diagrams for some of the key Use Cases</emphasis></simpara>
+</listitem>
+</itemizedlist>
+<simpara><emphasis role="strong">Further Information</emphasis></simpara>
+<simpara><emphasis>See</emphasis> <link xl:href="https://docs.arc42.org/section-6/">Runtime View</link> <emphasis>in the arc42
+documentation.</emphasis></simpara>
+<section xml:id="_use_case_01">
+<title>Use Case 01</title>
+<section xml:id="_activity_diagram_use_case_01">
+<title>Activity Diagram – Use Case 01</title>
+
+</section>
+<section xml:id="_sequence_diagram_use_case_01">
+<title>Sequence Diagram – Use Case 01</title>
+
+</section>
+</section>
+<section xml:id="_use_case_02">
+<title>Use Case 02</title>
+<section xml:id="_activity_diagram_use_case_02">
+<title>Activity Diagram – Use Case 02</title>
+
+</section>
+<section xml:id="_sequence_diagram_use_case_02">
+<title>Sequence Diagram – Use Case 02</title>
+<simpara><?asciidoc-pagebreak?></simpara>
+</section>
+</section>
+</section>
+<section xml:id="_deployment_view">
+<title>Deployment View</title>
+<simpara><emphasis role="strong">Content</emphasis></simpara>
+<simpara><emphasis>The deployment view describes:</emphasis></simpara>
+<orderedlist numeration="arabic">
+<listitem>
+<simpara>technical infrastructure used to execute your system, with
+infrastructure elements like geographical locations, environments,
+computers, processors, channels and net topologies as well as other
+infrastructure elements and</simpara>
+</listitem>
+<listitem>
+<simpara>mapping of (software) building blocks to that infrastructure elements.</simpara>
+</listitem>
+</orderedlist>
+<simpara><emphasis>Often systems are executed in different environments, e.g. development
+environment, test environment, production environment. In such cases you
+should document all relevant environments.</emphasis></simpara>
+<simpara><emphasis>Especially document a deployment view if your software is executed as
+distributed system with more than one computer, processor, server or
+container or when you design and construct your own hardware processors
+and chips.</emphasis></simpara>
+<simpara><emphasis>From a software perspective it is sufficient to capture only those
+elements of an infrastructure that are needed to show a deployment of
+your building blocks. Hardware architects can go beyond that and
+describe an infrastructure to any level of detail they need to capture.</emphasis></simpara>
+<important>
+<simpara>This section is split into two: <emphasis role="strong"><phrase role="red">Deployment View (This Section)</phrase></emphasis> and <emphasis role="strong"><phrase role="red">Cloud Architecture (Section 8)</phrase></emphasis></simpara>
+</important>
+<simpara><emphasis role="strong">Motivation</emphasis></simpara>
+<simpara><emphasis>Software does not run without hardware. This underlying infrastructure
+can and will influence a system and/or some cross-cutting concepts.
+Therefore, there is a need to know the infrastructure.</emphasis></simpara>
+<simpara><emphasis role="strong">Form</emphasis></simpara>
+<simpara><emphasis>This section and section 8 should contain Deployment and Integration diagrams. We
+need to provide Azure deployment diagrams for applications deployed in
+Azure cloud mapping individual components to Azure services and network
+topologies. It should also highlight Azure regions, Availability Zones
+for both Prod and DR (Pre-Prod)</emphasis></simpara>
+<simpara><emphasis role="strong">Further Information</emphasis></simpara>
+<simpara><emphasis>See</emphasis> <link xl:href="https://docs.arc42.org/section-7/">Deployment View</link> <emphasis>in the arc42 documentation.</emphasis></simpara>
+<section xml:id="_deployment_diagram">
+<title>Deployment Diagram</title>
+
+</section>
+<section xml:id="_system_landscape_diagram">
+<title>System Landscape Diagram</title>
+
+</section>
+<section xml:id="_infrastructure_architecture">
+<title>Infrastructure Architecture</title>
+<section xml:id="_environments">
+<title>Environments</title>
+<informaltable frame="all" rowsep="1" colsep="1">
+<?dbhtml table-width="100%"?>
+<?dbfo table-width="100%"?>
+<?dblatex table-width="100%"?>
+<tgroup cols="3">
+<colspec colname="col_1" colwidth="85*"/>
+<colspec colname="col_2" colwidth="144.5*"/>
+<colspec colname="col_3" colwidth="195.5*"/>
+<thead>
+<row>
+<entry align="left" valign="top"><emphasis role="strong">Environment</emphasis></entry>
+<entry align="left" valign="top"><emphasis role="strong">Purpose</emphasis></entry>
+<entry align="left" valign="top"><emphasis role="strong">Notes</emphasis></entry>
+</row>
+</thead>
+<tbody>
+<row>
+<entry align="left" valign="top"></entry>
+<entry align="left" valign="top"></entry>
+<entry align="left" valign="top"></entry>
+</row>
+</tbody>
+</tgroup>
+</informaltable>
+</section>
+<section xml:id="_application_components_to_infrastructure_components_mapping">
+<title>Application Components to Infrastructure Components Mapping</title>
+<simpara><emphasis role="strong">Mapping of building blocks to infrastructure (production):</emphasis></simpara>
+<informaltable frame="all" rowsep="1" colsep="1">
+<?dbhtml table-width="100%"?>
+<?dbfo table-width="100%"?>
+<?dblatex table-width="100%"?>
+<tgroup cols="3">
+<colspec colname="col_1" colwidth="102*"/>
+<colspec colname="col_2" colwidth="136*"/>
+<colspec colname="col_3" colwidth="187*"/>
+<thead>
+<row>
+<entry align="left" valign="top"><emphasis role="strong">Tier</emphasis></entry>
+<entry align="left" valign="top"><emphasis role="strong">Components</emphasis></entry>
+<entry align="left" valign="top"><emphasis role="strong">Building blocks hosted</emphasis></entry>
+</row>
+</thead>
+<tbody>
+<row>
+<entry align="left" valign="top"></entry>
+<entry align="left" valign="top"></entry>
+<entry align="left" valign="top"></entry>
+</row>
+</tbody>
+</tgroup>
+</informaltable>
+</section>
+<section xml:id="_quality_and_performance_features">
+<title>Quality and performance features:</title>
+
+</section>
+<section xml:id="_target_infrastructure_architecture">
+<title>Target Infrastructure Architecture</title>
+<section xml:id="_platforms_summary">
+<title>Platforms Summary</title>
+
+</section>
+<section xml:id="_load_balancers">
+<title>Load Balancers</title>
+
+</section>
+<section xml:id="_it_infrastructure_landscape_view">
+<title>IT Infrastructure Landscape View</title>
+
+</section>
+<section xml:id="_physical_compute">
+<title>Physical Compute</title>
+
+</section>
+<section xml:id="_databases">
+<title>Databases</title>
+
+</section>
+<section xml:id="_high_available_cluster">
+<title>High Available Cluster</title>
+
+</section>
+<section xml:id="_network_attached_storage_nas">
+<title>Network Attached Storage (NAS)</title>
+
+</section>
+<section xml:id="_network">
+<title>Network</title>
+
+</section>
+<section xml:id="_local_traffic_manager_ltm">
+<title>Local Traffic Manager (LTM)</title>
+
+</section>
+<section xml:id="_global_traffic_manager_gtm">
+<title>Global Traffic Manager (GTM)</title>
+
+</section>
+<section xml:id="_firewall_rules_north_south_east_west">
+<title>Firewall Rules (North-South / East-West)</title>
+<simpara><emphasis role="strong">Details to include:</emphasis></simpara>
+<itemizedlist>
+<listitem>
+<simpara>DNAT / SNAT rules</simpara>
+</listitem>
+<listitem>
+<simpara>Application rules (FQDN-based)</simpara>
+</listitem>
+<listitem>
+<simpara>Network rules (IP-based)</simpara>
+</listitem>
+<listitem>
+<simpara>Inbound vs outbound distinction</simpara>
+</listitem>
+</itemizedlist>
+<table frame="all" rowsep="1" colsep="1">
+<title>Firewall Rules</title>
+<?dbhtml table-width="61%"?>
+<?dbfo table-width="61%"?>
+<?dblatex table-width="61%"?>
+<tgroup cols="5">
+<colspec colname="col_1" colwidth="64.8125*"/>
+<colspec colname="col_2" colwidth="59.6275*"/>
+<colspec colname="col_3" colwidth="59.6275*"/>
+<colspec colname="col_4" colwidth="31.11*"/>
+<colspec colname="col_5" colwidth="44.0725*"/>
+<thead>
+<row>
+<entry align="left" valign="top"><emphasis role="strong">RULE TYPE</emphasis></entry>
+<entry align="left" valign="top"><emphasis role="strong">FROM</emphasis></entry>
+<entry align="left" valign="top"><emphasis role="strong">TO</emphasis></entry>
+<entry align="left" valign="top"><emphasis role="strong">PORT</emphasis></entry>
+<entry align="left" valign="top"><emphasis role="strong">ACTION</emphasis></entry>
+</row>
+</thead>
+<tbody>
+<row>
+<entry align="left" valign="top"><simpara>DNAT</simpara></entry>
+<entry align="left" valign="top"><simpara>Internet</simpara></entry>
+<entry align="left" valign="top"><simpara>Web Tier</simpara></entry>
+<entry align="left" valign="top"><simpara>443</simpara></entry>
+<entry align="left" valign="top"><simpara>Allow</simpara></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara>Network</simpara></entry>
+<entry align="left" valign="top"><simpara>App Subnet</simpara></entry>
+<entry align="left" valign="top"><simpara>External API</simpara></entry>
+<entry align="left" valign="top"><simpara>443</simpara></entry>
+<entry align="left" valign="top"><simpara>Allow</simpara></entry>
+</row>
+</tbody>
+</tgroup>
+</table>
+<simpara><?asciidoc-pagebreak?></simpara>
+</section>
+</section>
+</section>
+</section>
+<section xml:id="_cloud_architecture">
+<title>Cloud Architecture</title>
+<simpara><emphasis>Cloud Infrastructure section should contain cloud architecture diagram highlighting network topology, subnet, firewalls and cloud services used by the architecture. It should also provide information around high availability, regions, subscriptions, SKUs, Network Security Groups, NSG Rules, Firewalls, Cloud patterns and Cost optimization</emphasis></simpara>
+<simpara><emphasis role="strong">Availability NFR: <emphasis role="marked">This needs to be considered when detailing the
+Regional/AZ placement</emphasis></emphasis></simpara>
+<informaltable frame="all" rowsep="1" colsep="1">
+<?dbhtml table-width="99%"?>
+<?dbfo table-width="99%"?>
+<?dblatex table-width="99%"?>
+<tgroup cols="3">
+<colspec colname="col_1" colwidth="54.6975*"/>
+<colspec colname="col_2" colwidth="323.9775*"/>
+<colspec colname="col_3" colwidth="42.075*"/>
+<thead>
+<row>
+<entry align="left" valign="top"><emphasis role="strong">NFRID</emphasis></entry>
+<entry align="left" valign="top"><emphasis role="strong">Requirement Description</emphasis></entry>
+<entry align="left" valign="top"><emphasis role="strong">Status</emphasis></entry>
+</row>
+</thead>
+<tbody>
+<row>
+<entry align="left" valign="top"><simpara>NFAV001</simpara></entry>
+<entry align="left" valign="top"><simpara>The FDS solution shall be available for use and supported 24 hours a
+day, 7 days a week, 365 days a year in adherence with the technical
+design principles and standards applicable to Service Criticality Level
+1.</simpara><simpara>As a mission-critical system supporting the payment of Variable Pay
+Hours(over time), unplanned unavailability is not acceptable, and any
+failure must be recovered within a maximum Recovery Time Objective of 24
+hours(TBC with service).</simpara><simpara>The solution may only be taken offline outside of this commitment during
+a planned maintenance window, agreed in advance with the Application
+Service Manager, who shall notify the user community prior to any
+scheduled downtime.</simpara></entry>
+<entry align="left" valign="top"><simpara>Approved</simpara></entry>
+</row>
+</tbody>
+</tgroup>
+</informaltable>
+<section xml:id="_regions">
+<title>Regions</title>
+<tip>
+<simpara>Capture the Azure regions used for the solution.</simpara>
+</tip>
+<example>
+<title>Azure Regions</title>
+<simpara><emphasis role="strong">Example</emphasis></simpara>
+<informaltable frame="all" rowsep="1" colsep="1">
+<?dbhtml table-width="100%"?>
+<?dbfo table-width="100%"?>
+<?dblatex table-width="100%"?>
+<tgroup cols="6">
+<colspec colname="col_1" colwidth="148.75*"/>
+<colspec colname="col_2" colwidth="63.75*"/>
+<colspec colname="col_3" colwidth="85*"/>
+<colspec colname="col_4" colwidth="42.5*"/>
+<colspec colname="col_5" colwidth="42.5*"/>
+<colspec colname="col_6" colwidth="42.5*"/>
+<thead>
+<row>
+<entry align="left" valign="top">Region</entry>
+<entry align="left" valign="top">Primary</entry>
+<entry align="left" valign="top">Secondary</entry>
+<entry align="left" valign="top" namest="col_4" nameend="col_6">Availability Zones</entry>
+</row>
+</thead>
+<tbody>
+<row>
+<entry align="left" valign="top"></entry>
+<entry align="left" valign="top"></entry>
+<entry align="left" valign="top"></entry>
+<entry align="left" valign="top"><simpara>AZ1</simpara></entry>
+<entry align="left" valign="top"><simpara>AZ2</simpara></entry>
+<entry align="left" valign="top"><simpara>AZ3</simpara></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara>North Europe</simpara></entry>
+<entry align="center" valign="top"><simpara>Yes</simpara></entry>
+<entry align="center" valign="top"></entry>
+<entry align="center" valign="top"></entry>
+<entry align="center" valign="top"></entry>
+<entry align="center" valign="top"></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara>West Europe</simpara></entry>
+<entry align="center" valign="top"></entry>
+<entry align="center" valign="top"></entry>
+<entry align="center" valign="top"></entry>
+<entry align="center" valign="top"></entry>
+<entry align="center" valign="top"></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara>UK South</simpara></entry>
+<entry align="center" valign="top"></entry>
+<entry align="center" valign="top"></entry>
+<entry align="center" valign="top"></entry>
+<entry align="center" valign="top"></entry>
+<entry align="center" valign="top"></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara>Germany West Central</simpara></entry>
+<entry align="center" valign="top"><simpara>Yes</simpara></entry>
+<entry align="center" valign="top"></entry>
+<entry align="center" valign="top"><simpara>Yes</simpara></entry>
+<entry align="center" valign="top"><simpara>Yes</simpara></entry>
+<entry align="center" valign="top"><simpara>Yes</simpara></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara>Sweden Central</simpara></entry>
+<entry align="center" valign="top"></entry>
+<entry align="center" valign="top"><simpara>Yes</simpara></entry>
+<entry align="center" valign="top"><simpara>Yes</simpara></entry>
+<entry align="center" valign="top"><simpara>Yes</simpara></entry>
+<entry align="center" valign="top"><simpara>Yes</simpara></entry>
+</row>
+</tbody>
+</tgroup>
+</informaltable>
+</example>
+<section xml:id="_rationale_latency_regulatory_capacity_constraints">
+<title>Rationale (latency, regulatory, capacity constraints)</title>
+
+</section>
+</section>
+<section xml:id="_availability_zones">
+<title>Availability Zones</title>
+<tip>
+<simpara>Define high availability architecture.</simpara>
+</tip>
+<itemizedlist>
+<listitem>
+<simpara>Services deployed across zones</simpara>
+</listitem>
+<listitem>
+<simpara>Zone pinning requirements (if any)</simpara>
+</listitem>
+<listitem>
+<simpara>Zonal vs zone-redundant SKUs</simpara>
+</listitem>
+</itemizedlist>
+<example>
+<title>High Availability Architecture</title>
+<simpara><emphasis role="strong">Example:</emphasis></simpara>
+<itemizedlist>
+<listitem>
+<simpara>Region supports 3 AZs</simpara>
+</listitem>
+<listitem>
+<simpara>Workloads deployed Zone-Redundant (ZRS / AZ-aware)</simpara>
+</listitem>
+</itemizedlist>
+</example>
+<itemizedlist>
+<listitem>
+<simpara>Region: FDS Prod and Prod Application are deployed in the Germany West
+and Sweden Central regions, each supporting 3 AZs.</simpara>
+</listitem>
+<listitem>
+<simpara>App Service plans</simpara>
+</listitem>
+</itemizedlist>
+</section>
+<section xml:id="_subscriptions_naming_structure">
+<title>Subscriptions (Naming &amp; Structure)</title>
+<tip>
+<simpara>Aligned to the <emphasis role="strong">subscription factory model</emphasis> from your HLD artefact</simpara>
+</tip>
+<simpara><emphasis role="strong">Details to include:</emphasis></simpara>
+<itemizedlist>
+<listitem>
+<simpara>Subscription names (fully qualified)</simpara>
+</listitem>
+<listitem>
+<simpara>Environment split:</simpara>
+<itemizedlist>
+<listitem>
+<simpara>Prod</simpara>
+</listitem>
+<listitem>
+<simpara>Pre-Prod</simpara>
+</listitem>
+<listitem>
+<simpara>Non-Prod (Dev/Test)</simpara>
+</listitem>
+</itemizedlist>
+</listitem>
+<listitem>
+<simpara>Platform vs Workload subscriptions</simpara>
+</listitem>
+<listitem>
+<simpara>Naming standard compliance</simpara>
+</listitem>
+</itemizedlist>
+<informaltable frame="all" rowsep="1" colsep="1">
+<?dbhtml table-width="100%"?>
+<?dbfo table-width="100%"?>
+<?dblatex table-width="100%"?>
+<tgroup cols="4">
+<colspec colname="col_1" colwidth="63.75*"/>
+<colspec colname="col_2" colwidth="85*"/>
+<colspec colname="col_3" colwidth="170*"/>
+<colspec colname="col_4" colwidth="106.25*"/>
+<thead>
+<row>
+<entry align="center" valign="top"><emphasis role="strong">Env</emphasis></entry>
+<entry align="center" valign="top"><emphasis role="strong">Subscription Name</emphasis></entry>
+<entry align="center" valign="top"><emphasis role="strong">Subscription ID</emphasis></entry>
+<entry align="center" valign="top"><emphasis role="strong">Type</emphasis></entry>
+</row>
+</thead>
+<tbody>
+<row>
+<entry align="left" valign="top"></entry>
+<entry align="left" valign="top"></entry>
+<entry align="left" valign="top"></entry>
+<entry align="left" valign="top"></entry>
+</row>
+</tbody>
+</tgroup>
+</informaltable>
+<simpara><link xl:href="https://andotce.royalmailgroup.com/spaces/RDH/pages/454309842/IA-TS24+Cloud+Resource+Naming+Standard"><emphasis role="strong">Standards</emphasis></link></simpara>
+</section>
+<section xml:id="_skus_used_per_region">
+<title>SKU’S Used (Per Region)</title>
+<tip>
+<simpara>Define all critical service SKUs per region.</simpara>
+</tip>
+<simpara><emphasis role="strong">Details to include:</emphasis></simpara>
+<itemizedlist>
+<listitem>
+<simpara>Compute SKUs (VM sizes / VMSS)</simpara>
+</listitem>
+<listitem>
+<simpara>Storage SKUs (Standard / Premium / ZRS)</simpara>
+</listitem>
+<listitem>
+<simpara>PaaS SKUs (if applicable)</simpara>
+</listitem>
+</itemizedlist>
+<example>
+<title>SKU Example</title>
+<simpara><emphasis role="strong">Example:</emphasis></simpara>
+<informaltable frame="all" rowsep="1" colsep="1">
+<?dbhtml table-width="100%"?>
+<?dbfo table-width="100%"?>
+<?dblatex table-width="100%"?>
+<tgroup cols="4">
+<colspec colname="col_1" colwidth="102*"/>
+<colspec colname="col_2" colwidth="110.5*"/>
+<colspec colname="col_3" colwidth="106.25*"/>
+<colspec colname="col_4" colwidth="106.25*"/>
+<thead>
+<row>
+<entry align="left" valign="top"><emphasis role="strong">ENVIRONMENT</emphasis></entry>
+<entry align="left" valign="top"><emphasis role="strong">COMPONENT</emphasis></entry>
+<entry align="left" valign="top"><emphasis role="strong">REGION</emphasis></entry>
+<entry align="left" valign="top"><emphasis role="strong">SKU</emphasis></entry>
+</row>
+</thead>
+<tbody>
+<row>
+<entry align="left" valign="top"><simpara>NPD</simpara></entry>
+<entry align="left" valign="top"><simpara>ExpressRoute GW</simpara></entry>
+<entry align="left" valign="top"><simpara>UK South</simpara></entry>
+<entry align="left" valign="top"><simpara>ErGw3AZ</simpara></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara>PPD</simpara></entry>
+<entry align="left" valign="top"><simpara>Firewall</simpara></entry>
+<entry align="left" valign="top"><simpara>UK South</simpara></entry>
+<entry align="left" valign="top"><simpara>Premium</simpara></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara>PRD</simpara></entry>
+<entry align="left" valign="top"><simpara>VM</simpara></entry>
+<entry align="left" valign="top"><simpara>UK South</simpara></entry>
+<entry align="left" valign="top"><simpara>D4s v5</simpara></entry>
+</row>
+</tbody>
+</tgroup>
+</informaltable>
+</example>
+</section>
+<section xml:id="_network_security_group_nsg_rules">
+<title>Network Security Group (NSG) Rules</title>
+<tip>
+<simpara>Already aligned to your HLD approach, where NSGs control <emphasis role="strong">spoke traffic</emphasis></simpara>
+</tip>
+<simpara><emphasis role="strong">Details to capture:</emphasis></simpara>
+<itemizedlist>
+<listitem>
+<simpara>Source → Destination</simpara>
+</listitem>
+<listitem>
+<simpara>Port / Protocol</simpara>
+</listitem>
+<listitem>
+<simpara>Action (Allow/Deny)</simpara>
+</listitem>
+<listitem>
+<simpara>Priority</simpara>
+</listitem>
+<listitem>
+<simpara>Purpose</simpara>
+</listitem>
+</itemizedlist>
+<example>
+<title>NSG Rules</title>
+<simpara><emphasis role="strong">Example table:</emphasis></simpara>
+<informaltable frame="all" rowsep="1" colsep="1">
+<?dbhtml table-width="88%"?>
+<?dbfo table-width="88%"?>
+<?dblatex table-width="88%"?>
+<tgroup cols="6">
+<colspec colname="col_1" colwidth="104.72*"/>
+<colspec colname="col_2" colwidth="59.84*"/>
+<colspec colname="col_3" colwidth="74.8*"/>
+<colspec colname="col_4" colwidth="29.92*"/>
+<colspec colname="col_5" colwidth="41.14*"/>
+<colspec colname="col_6" colwidth="63.58*"/>
+<thead>
+<row>
+<entry align="left" valign="top"><emphasis role="strong">RULE NAME</emphasis></entry>
+<entry align="left" valign="top"><emphasis role="strong">SOURCE</emphasis></entry>
+<entry align="left" valign="top"><emphasis role="strong">DESTINATION</emphasis></entry>
+<entry align="left" valign="top"><emphasis role="strong">PORT</emphasis></entry>
+<entry align="left" valign="top"><emphasis role="strong">ACTION</emphasis></entry>
+<entry align="left" valign="top"><emphasis role="strong">PURPOSE</emphasis></entry>
+</row>
+</thead>
+<tbody>
+<row>
+<entry align="left" valign="top"><simpara>Allow-App-To-DB</simpara></entry>
+<entry align="left" valign="top"><simpara>App Subnet</simpara></entry>
+<entry align="left" valign="top"><simpara>DB Subnet</simpara></entry>
+<entry align="left" valign="top"><simpara>1433</simpara></entry>
+<entry align="left" valign="top"><simpara>Allow</simpara></entry>
+<entry align="left" valign="top"><simpara>SQL access</simpara></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara>Allow-App-To-Blob</simpara></entry>
+<entry align="left" valign="top"><simpara>App Subnet</simpara></entry>
+<entry align="left" valign="top"><simpara>Storage Subnet</simpara></entry>
+<entry align="left" valign="top"><simpara>443</simpara></entry>
+<entry align="left" valign="top"><simpara>Allow</simpara></entry>
+<entry align="left" valign="top"><simpara>Blob Access</simpara></entry>
+</row>
+</tbody>
+</tgroup>
+</informaltable>
+</example>
+<important>
+<simpara>If traffic stays <emphasis role="strong">inside the VNet</emphasis> → <emphasis role="strong">NSG rules must be defined</emphasis></simpara>
+</important>
+<important>
+<simpara>If traffic leaves the VNet → <emphasis role="strong">NSGs are not the primary control</emphasis> (handled via hub firewall(s))</simpara>
+</important>
+<informaltable frame="all" rowsep="1" colsep="1">
+<?dbhtml table-width="92%"?>
+<?dbfo table-width="92%"?>
+<?dblatex table-width="92%"?>
+<tgroup cols="3">
+<colspec colname="col_1" colwidth="152.49*"/>
+<colspec colname="col_2" colwidth="82.11*"/>
+<colspec colname="col_3" colwidth="156.4*"/>
+<thead>
+<row>
+<entry align="left" valign="top"><emphasis role="strong">TRAFFIC TYPE</emphasis></entry>
+<entry align="left" valign="top"><emphasis role="strong">NSG REQUIRED</emphasis></entry>
+<entry align="left" valign="top"><emphasis role="strong">NOTE</emphasis></entry>
+</row>
+</thead>
+<tbody>
+<row>
+<entry align="left" valign="top"><simpara>Subnet → Subnet (same VNet)</simpara></entry>
+<entry align="left" valign="top"><simpara>✅ Yes</simpara></entry>
+<entry align="left" valign="top"><simpara>Primary control</simpara></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara>VNet → External / Internet</simpara></entry>
+<entry align="left" valign="top"><simpara>❌ No</simpara></entry>
+<entry align="left" valign="top"><simpara>Controlled by firewall/routing</simpara></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara>VNet → Other VNet</simpara></entry>
+<entry align="left" valign="top"><simpara>❌ No</simpara></entry>
+<entry align="left" valign="top"><simpara>Controlled via peering &#43; firewall</simpara></entry>
+</row>
+</tbody>
+</tgroup>
+</informaltable>
+</section>
+<section xml:id="_network_subnet_design">
+<title>Network / Subnet Design</title>
+<important>
+<simpara>Critical for addressing your “network/subnet size”.</simpara>
+</important>
+<simpara><emphasis role="strong">Details to include:</emphasis></simpara>
+<itemizedlist>
+<listitem>
+<simpara>VNET address space</simpara>
+</listitem>
+<listitem>
+<simpara>Subnet segmentation</simpara>
+</listitem>
+<listitem>
+<simpara>CIDR sizing</simpara>
+</listitem>
+<listitem>
+<simpara>Reserved IP strategy</simpara>
+</listitem>
+<listitem>
+<simpara>Growth headroom</simpara>
+</listitem>
+</itemizedlist>
+<example>
+<title>Network / Subnet</title>
+<simpara><emphasis role="strong">Example:</emphasis></simpara>
+<informaltable frame="all" rowsep="1" colsep="1">
+<?dbhtml table-width="45%"?>
+<?dbfo table-width="45%"?>
+<?dblatex table-width="45%"?>
+<tgroup cols="3">
+<colspec colname="col_1" colwidth="107.1*"/>
+<colspec colname="col_2" colwidth="30.6*"/>
+<colspec colname="col_3" colwidth="53.55*"/>
+<thead>
+<row>
+<entry align="left" valign="top"><emphasis role="strong">SUBNET</emphasis></entry>
+<entry align="left" valign="top"><emphasis role="strong">CIDR</emphasis></entry>
+<entry align="left" valign="top"><emphasis role="strong">PURPOSE</emphasis></entry>
+</row>
+</thead>
+<tbody>
+<row>
+<entry align="left" valign="top"><simpara>AzureFirewallSubnet</simpara></entry>
+<entry align="left" valign="top"><simpara>/26</simpara></entry>
+<entry align="left" valign="top"><simpara>Firewall</simpara></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara>AppSubnet</simpara></entry>
+<entry align="left" valign="top"><simpara>/24</simpara></entry>
+<entry align="left" valign="top"><simpara>App tier</simpara></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara>DBSubnet</simpara></entry>
+<entry align="left" valign="top"><simpara>/24</simpara></entry>
+<entry align="left" valign="top"><simpara>Database</simpara></entry>
+</row>
+</tbody>
+</tgroup>
+</informaltable>
+</example>
+</section>
+<section xml:id="_patterns_blueprints_catalogue_of_whitelisted_azure_productsservices">
+<title>Patterns / Blueprints / Catalogue of Whitelisted Azure Products/Services</title>
+<simpara>Pattern Consumption Table</simpara>
+<important>
+<simpara>The architect MUST confirm coverage across all domains:</simpara>
+</important>
+<informaltable frame="all" rowsep="1" colsep="1">
+<?dbhtml table-width="57%"?>
+<?dbfo table-width="57%"?>
+<?dblatex table-width="57%"?>
+<tgroup cols="3">
+<colspec colname="col_1" colwidth="65.4074*"/>
+<colspec colname="col_2" colwidth="138.0824*"/>
+<colspec colname="col_3" colwidth="38.7599*"/>
+<thead>
+<row>
+<entry align="left" valign="top"><emphasis role="strong">DOMAIN</emphasis></entry>
+<entry align="left" valign="top"><emphasis role="strong">PATTERN IDENTIFIED (Y/N)</emphasis></entry>
+<entry align="left" valign="top"><emphasis role="strong">NOTES</emphasis></entry>
+</row>
+</thead>
+<tbody>
+<row>
+<entry align="left" valign="top"><simpara><emphasis role="strong">Networking</emphasis></simpara></entry>
+<entry align="left" valign="top"></entry>
+<entry align="left" valign="top"></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara><emphasis role="strong">Security</emphasis></simpara></entry>
+<entry align="left" valign="top"></entry>
+<entry align="left" valign="top"></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara><emphasis role="strong">Compute</emphasis></simpara></entry>
+<entry align="left" valign="top"></entry>
+<entry align="left" valign="top"></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara><emphasis role="strong">Data</emphasis></simpara></entry>
+<entry align="left" valign="top"></entry>
+<entry align="left" valign="top"></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara><emphasis role="strong">Integration</emphasis></simpara></entry>
+<entry align="left" valign="top"></entry>
+<entry align="left" valign="top"></entry>
+</row>
+</tbody>
+</tgroup>
+</informaltable>
+<simpara><link xl:href="https://andotce.royalmailgroup.com/pages/viewpage.action?pageId=504201390&amp;spaceKey=HCI&amp;title=Whitelisted%2BAzure%2BResource%2BTypes%2BStatus%2B-%2BSLZ"><emphasis role="strong">Catalogue</emphasis></link></simpara>
+</section>
+<section xml:id="_cost_optimisation_and_finops_alignment">
+<title>Cost Optimisation and FinOps Alignment*</title>
+<itemizedlist>
+<listitem>
+<simpara>Use of reserved capacity (where applicable)</simpara>
+</listitem>
+<listitem>
+<simpara>Right-sizing of compute resources</simpara>
+</listitem>
+<listitem>
+<simpara>Use of PaaS over IaaS where appropriate</simpara>
+</listitem>
+<listitem>
+<simpara>Separation of environments for cost control</simpara>
+</listitem>
+<listitem>
+<simpara>Costs MUST be derived from the Azure Calculator</simpara>
+</listitem>
+<listitem>
+<simpara>DR costs MUST be included where applicable</simpara>
+</listitem>
+</itemizedlist>
+<simpara><emphasis role="strong">Cost Breakdown Table</emphasis></simpara>
+<example>
+<title>Cost Breakdown</title>
+<simpara><emphasis role="strong">Example:</emphasis></simpara>
+<informaltable frame="all" rowsep="1" colsep="1">
+<?dbhtml table-width="100%"?>
+<?dbfo table-width="100%"?>
+<?dblatex table-width="100%"?>
+<tgroup cols="6">
+<colspec colname="col_1" colwidth="80.75*"/>
+<colspec colname="col_2" colwidth="55.25*"/>
+<colspec colname="col_3" colwidth="63.75*"/>
+<colspec colname="col_4" colwidth="46.75*"/>
+<colspec colname="col_5" colwidth="76.5*"/>
+<colspec colname="col_6" colwidth="102*"/>
+<thead>
+<row>
+<entry align="left" valign="top"><emphasis role="strong">COMPONENT</emphasis></entry>
+<entry align="left" valign="top"><emphasis role="strong">SERVICE</emphasis></entry>
+<entry align="left" valign="top"><emphasis role="strong">SKU</emphasis></entry>
+<entry align="left" valign="top"><emphasis role="strong">REGION</emphasis></entry>
+<entry align="left" valign="top"><emphasis role="strong">EST. MONTHLY COST (£)</emphasis></entry>
+<entry align="left" valign="top"><emphasis role="strong">JUSTIFICATION</emphasis></entry>
+</row>
+</thead>
+<tbody>
+<row>
+<entry align="left" valign="top"><simpara><emphasis role="strong">Compute</emphasis></simpara></entry>
+<entry align="left" valign="top"><simpara><emphasis role="strong">VMSS</emphasis></simpara></entry>
+<entry align="left" valign="top"><simpara><emphasis role="strong">D4s v5</emphasis></simpara></entry>
+<entry align="left" valign="top"><simpara><emphasis role="strong">UK South</emphasis></simpara></entry>
+<entry align="left" valign="top"></entry>
+<entry align="left" valign="top"><simpara><emphasis role="strong">Supports app tier scaling</emphasis></simpara></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara><emphasis role="strong">Security</emphasis></simpara></entry>
+<entry align="left" valign="top"><simpara><emphasis role="strong">Azure Firewall</emphasis></simpara></entry>
+<entry align="left" valign="top"><simpara><emphasis role="strong">Premium</emphasis></simpara></entry>
+<entry align="left" valign="top"><simpara><emphasis role="strong">UK South</emphasis></simpara></entry>
+<entry align="left" valign="top"></entry>
+<entry align="left" valign="top"><simpara><emphasis role="strong">Required for
+central control</emphasis></simpara></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara><emphasis role="strong">Data</emphasis></simpara></entry>
+<entry align="left" valign="top"><simpara><emphasis role="strong">Azure SQL</emphasis></simpara></entry>
+<entry align="left" valign="top"><simpara><emphasis role="strong">Business Critical</emphasis></simpara></entry>
+<entry align="left" valign="top"><simpara><emphasis role="strong">UK South</emphasis></simpara></entry>
+<entry align="left" valign="top"></entry>
+<entry align="left" valign="top"></entry>
+</row>
+</tbody>
+</tgroup>
+</informaltable>
+</example>
+<simpara><?asciidoc-pagebreak?></simpara>
+</section>
+</section>
+<section xml:id="_security_architecture">
+<title>Security Architecture</title>
+<simpara><emphasis role="strong">Content</emphasis></simpara>
+<simpara><emphasis>Software security architecture is the foundational design of a system that embeds defenses directly into the code and infrastructure, ensuring resistance against malicious attacks. It is a critical necessity to proactively mitigate vulnerabilities, prevent catastrophic data breaches, and maintain customer trust</emphasis></simpara>
+<simpara><emphasis>A robust software security architecture is essential for several key reasons:</emphasis></simpara>
+<itemizedlist>
+<listitem>
+<simpara><emphasis role="strong">Proactive Vulnerability Mitigation</emphasis>: <emphasis>By designing security into the software development life cycle (SDLC) from the ground up, you can prevent up to 80% of security problems before the code is even written. It replaces reactive, "afterthought" patching with built-in resilience.</emphasis></simpara>
+</listitem>
+<listitem>
+<simpara><emphasis role="strong">Minimizing Breach Impact</emphasis>: <emphasis>A solid architecture ensures that if a component is breached, the damage is isolated. Principles like "least privilege" and strict access controls prevent an attacker from escalating their access across the entire system.</emphasis></simpara>
+</listitem>
+<listitem>
+<simpara><emphasis role="strong">Protecting Critical Assets</emphasis>: <emphasis>It establishes standardized encryption, authentication, and authorization checkpoints to safeguard sensitive user data, intellectual property, and financial systems.</emphasis></simpara>
+</listitem>
+<listitem>
+<simpara><emphasis role="strong">Ensuring Compliance</emphasis>: <emphasis>For highly regulated industries like finance, healthcare, and e-commerce, a structured architectural framework is required to meet strict legal regulations and data protection laws</emphasis></simpara>
+</listitem>
+</itemizedlist>
+<simpara><emphasis>It should contain the following:</emphasis></simpara>
+<orderedlist numeration="arabic">
+<listitem>
+<simpara>Cyber Architecture ARB Survey</simpara>
+</listitem>
+<listitem>
+<simpara>Data Flow Diagram with STRIDE Threat Model and Mitigation</simpara>
+</listitem>
+<listitem>
+<simpara>Identity &amp; Access Management (IAM)</simpara>
+</listitem>
+<listitem>
+<simpara>Data Categorization</simpara>
+</listitem>
+<listitem>
+<simpara>Usage of AI (<phrase role="green">If Applicable</phrase>)</simpara>
+</listitem>
+<listitem>
+<simpara>Security RAID Log</simpara>
+</listitem>
+<listitem>
+<simpara>Application Business Criticality Rating</simpara>
+</listitem>
+<listitem>
+<simpara>Quantum Cryptography Secure <phrase role="red">(TBC)</phrase></simpara>
+</listitem>
+<listitem>
+<simpara>Active Directory Tier Level <phrase role="red">(TBC)</phrase></simpara>
+</listitem>
+<listitem>
+<simpara>Privileged Access Requirements (CyberArk)</simpara>
+</listitem>
+<listitem>
+<simpara>User Provisioning Requirement (SailPoint)</simpara>
+</listitem>
+<listitem>
+<simpara>Key Management Services Requirements</simpara>
+</listitem>
+</orderedlist>
+<simpara><emphasis role="strong">Motivation</emphasis></simpara>
+<simpara><emphasis>The primary rationale for software security architecture is to proactively embed protective measures into a system, rather than treating them as an afterthought. It acts as a foundational blueprint that minimizes the attack surface, prevents costly architectural reworks, and ensures business-wide compliance.</emphasis></simpara>
+<simpara><emphasis>The fundamental drivers and objectives of this architecture include:</emphasis></simpara>
+<orderedlist numeration="arabic">
+<listitem>
+<simpara><emphasis role="strong">The Secure by Design Imperative</emphasis></simpara>
+<orderedlist numeration="loweralpha">
+<listitem>
+<simpara><emphasis role="strong">Shift-Left Approach</emphasis>: <emphasis>Embedding security during the initial planning and design phases is exponentially more cost-effective than remediating vulnerabilities found in production.</emphasis></simpara>
+</listitem>
+<listitem>
+<simpara><emphasis role="strong">Complexity Management</emphasis>: <emphasis>Modern software relies heavily on distributed systems and APIs. Security architecture provides consistent, unified controls rather than fragmented, bolt-on solutions that leave systems fragile.</emphasis></simpara>
+</listitem>
+</orderedlist>
+</listitem>
+<listitem>
+<simpara><emphasis role="strong">Core Protection Objectives (CIA Triad)</emphasis></simpara>
+<orderedlist numeration="loweralpha">
+<listitem>
+<simpara><emphasis role="strong">Confidentiality</emphasis>: <emphasis>Ensures that sensitive data is protected from unauthorized access, leveraging end-to-end encryption and robust identity access management (IAM).</emphasis></simpara>
+</listitem>
+<listitem>
+<simpara><emphasis role="strong">Integrity</emphasis>: <emphasis>Maintains the accuracy and trustworthiness of data by implementing strict authorization protocols and data classification policies.</emphasis></simpara>
+</listitem>
+<listitem>
+<simpara><emphasis role="strong">Availability</emphasis>: <emphasis>Ensures services and data remain accessible, even amidst malicious disruptions or unintended software failures</emphasis></simpara>
+</listitem>
+</orderedlist>
+</listitem>
+<listitem>
+<simpara><emphasis role="strong">Structural Capabilities</emphasis></simpara>
+<orderedlist numeration="loweralpha">
+<listitem>
+<simpara><emphasis role="strong">Segregation &amp; Segmentation</emphasis>: <emphasis>Hybrid and cloud environments require independent building blocks so that a compromise in one service does not cascade through the entire organization.</emphasis></simpara>
+</listitem>
+<listitem>
+<simpara><emphasis role="strong">Zero-Trust Frameworks</emphasis>: <emphasis>Assumes no user or service is trusted by default. Architecture mandates continuous validation, authentication, and authorization.</emphasis></simpara>
+</listitem>
+</orderedlist>
+</listitem>
+<listitem>
+<simpara><emphasis role="strong">Business Enablement and Risk Management</emphasis></simpara>
+<orderedlist numeration="loweralpha">
+<listitem>
+<simpara><emphasis role="strong">Compliance</emphasis>: <emphasis>Aligns system designs with data privacy and cybersecurity laws, such as GDPR and other industry frameworks.</emphasis></simpara>
+</listitem>
+<listitem>
+<simpara><emphasis role="strong">Cost Reduction</emphasis>: <emphasis>Minimizes long-term expenses by preventing security breaches, reducing expensive downtime, and streamlining incident response.</emphasis></simpara>
+</listitem>
+</orderedlist>
+</listitem>
+</orderedlist>
+<simpara><emphasis role="strong">Form</emphasis></simpara>
+<simpara><emphasis>Security Architecture can be documented through diagrams, text and tables. This section should contain at least a Level-1 DFD along with a STRIDE Threat Model with clearly defined threat boundaries. RAID Logs should be in tabular format.</emphasis></simpara>
+<section xml:id="_cyber_architecture_standards_and_nfrs">
+<title>Cyber Architecture Standards and NFRs</title>
+<table frame="all" rowsep="1" colsep="1">
+<title>Details</title>
+<?dbhtml table-width="60%"?>
+<?dbfo table-width="60%"?>
+<?dblatex table-width="60%"?>
+<tgroup cols="2">
+<colspec colname="col_1" colwidth="127.5*"/>
+<colspec colname="col_2" colwidth="127.5*"/>
+<thead>
+<row>
+<entry align="left" valign="top"><emphasis role="strong">Title</emphasis></entry>
+<entry align="left" valign="top"><emphasis role="strong">Response</emphasis></entry>
+</row>
+</thead>
+<tbody>
+<row>
+<entry align="left" valign="top"><simpara>All Royal Mail Cyber Architecture Standards can be found here:<?asciidoc-br?>
+<link xl:href="https://intranet.royalmailgroup.com/sites/ThinkSecure/ThinkCyber/SitePages/Welcome.aspx">Architecture Standards</link><?asciidoc-br?>
+Please confirm that you have reviewed these standards before completing the survey.</simpara></entry>
+<entry align="left" valign="top"><simpara>Yes/No</simpara></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara>TDA Submission Name</simpara></entry>
+<entry align="left" valign="top"></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara>TDA Approval Date Required</simpara></entry>
+<entry align="left" valign="top"></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara>Cyber Advisor Name (A Cyber Advisor is required for every project going through TDA)</simpara></entry>
+<entry align="left" valign="top"></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara>Does this TDA submission introduce any AI? Please detail the requirement.</simpara></entry>
+<entry align="left" valign="top"></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara>Data Privacy Impact Assessment Reference Number (if required)</simpara></entry>
+<entry align="left" valign="top"></entry>
+</row>
+</tbody>
+</tgroup>
+</table>
+<table frame="all" rowsep="1" colsep="1">
+<title>Cyber Architecture Standards Attestation</title>
+<?dbhtml table-width="100%"?>
+<?dbfo table-width="100%"?>
+<?dblatex table-width="100%"?>
+<tgroup cols="3">
+<colspec colname="col_1" colwidth="170*"/>
+<colspec colname="col_2" colwidth="42.5*"/>
+<colspec colname="col_3" colwidth="212.5*"/>
+<tbody>
+<row>
+<entry align="left" valign="top"><simpara><emphasis role="strong">Survey Question</emphasis></simpara></entry>
+<entry align="left" valign="top"><simpara><emphasis role="strong">Response</emphasis> <phrase role="red"><emphasis role="strong">(Yes/No/NA)</emphasis></phrase></simpara></entry>
+<entry align="left" valign="top"><simpara><emphasis role="strong">Rationale</emphasis> <phrase role="red"><emphasis role="strong">(If No or NA)</emphasis></phrase></simpara></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara>TDA Q1 - Does the solution make use of cloud-based services and ensure that they are appropriately secured and managed inline with ISS-001 - Cloud Computing Security Standard?</simpara></entry>
+<entry align="left" valign="top"></entry>
+<entry align="left" valign="top"></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara>TDA Q2 - Does the solution transfer and store data, if so have you established and documented a minimum acceptable level of cryptographic algorithms and protocols for transmission and storage of Royal Mail data inline with ISS-002 - Cryptography Standard?</simpara></entry>
+<entry align="left" valign="top"></entry>
+<entry align="left" valign="top"></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara>TDA Q3 - Has the solution been designed with the key objectives of protection of data and disaster recovery/business continuity with the ability to recover systems and recent live data in the event of a partial or total loss of a service aligned to ISS-003 - Data Backup and Restoration Standard?</simpara></entry>
+<entry align="left" valign="top"></entry>
+<entry align="left" valign="top"></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara>TDA Q4 -Does the solution ensure that RM assets are appropriately managed and protected from information security breaches inline with ISS-004 - Asset Management Standard?(An Information Asset is a definable piece of information, stored or processed in any manner which is recognized as valuable to the Royal Mail Group. A system that processes that information is also an asset.)</simpara></entry>
+<entry align="left" valign="top"></entry>
+<entry align="left" valign="top"></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara>TDA Q5 - Does the solution required and meet the classifying of information assets as stated in ISS-005 - Information Classification Standard?</simpara></entry>
+<entry align="left" valign="top"></entry>
+<entry align="left" valign="top"></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara>TDA Q6 - Has the solution/design assigned Data/System Impact Levels as stated in ISS-005 - Information Classification Standard?</simpara></entry>
+<entry align="left" valign="top"></entry>
+<entry align="left" valign="top"></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara>TDA Q7 - Does the solution/design require and ensure that data is labelled accordingly as stated in ISS-005 - Information Classification Standard?</simpara></entry>
+<entry align="left" valign="top"></entry>
+<entry align="left" valign="top"></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara>TDA Q 8 - Has the solution or design identified, assessed and provided a treatment plan and monitoring of any Tech and Cyber risk as detailed in ISS-007 - Risk Management Standard?</simpara></entry>
+<entry align="left" valign="top"></entry>
+<entry align="left" valign="top"></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara>TDA Q9 - Has the solution implemented the identified requirements for the provisioning, secure usage, and management of company-provided mobile devices, specifically tablets and smartphones, through the use of Mobile Device Management (MDM) software aligned to ISS-008 - Mobile Security Standard?</simpara></entry>
+<entry align="left" valign="top"></entry>
+<entry align="left" valign="top"></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara>TDA Q10 - Has the solution met the requirements to protect RMG data specifically confidential or strictly confidential data accessed or stored on mobile devices as outlined in ISS-008 - Mobile Security Standard?</simpara></entry>
+<entry align="left" valign="top"></entry>
+<entry align="left" valign="top"></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara>TDA Q11 - Does the solution implement computer network solutions in accordance with the "Information Security requirements" specified in ISS-009 - Network Security Standard?</simpara></entry>
+<entry align="left" valign="top"></entry>
+<entry align="left" valign="top"></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara>TDA Q12 - Has the project understood the procedures necessary to identify, assess, prioritise, and remediate vulnerabilities affecting Royal Mail Group (RMG) following the ISS-010 - Vulnerability Management Standard?(Including but not limited to operating systems, applications, cloud resources, web technologies, server, desktop, mobile device software, hardware, network devices and common coding vulnerabilities in software-development processes)</simpara></entry>
+<entry align="left" valign="top"></entry>
+<entry align="left" valign="top"></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara>TDA Q13 - Has the solution/project reviewed and aligned to the security requirements for developing and using web services, whether in designing a solution, implementing a system or operating a system based on web services in line with ISS-011 - Web Services Security Standard</simpara></entry>
+<entry align="left" valign="top"></entry>
+<entry align="left" valign="top"></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara>TDA Q14 - Does the solution or design implement endpoint solutions in accordance with requirements from Information Security and others; to describe system functionality and parameters necessary to fulfil security requirements; and to define key support processes as specified in ISS-012 - Endpoint Security Standard?</simpara></entry>
+<entry align="left" valign="top"></entry>
+<entry align="left" valign="top"></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara>TDA Q15 - Does the solution or design meet the minimum standard to allow Royal Mail Group (RMG) to address Authentication related risks through the implementation of controls as specified in ISS-013 - Authentication Standard?</simpara></entry>
+<entry align="left" valign="top"></entry>
+<entry align="left" valign="top"></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara>TDA Q16 - Does the solution need to authenticate non-RMG users and is this inline with ISS-013 - Authentication Standard?</simpara></entry>
+<entry align="left" valign="top"></entry>
+<entry align="left" valign="top"></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara>TDA Q17 - Does the solution need to authenticate users from an RMG-managed user directory and does this follow the requirements in ISS-013 - Authentication Standard?</simpara></entry>
+<entry align="left" valign="top"></entry>
+<entry align="left" valign="top"></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara>TDA Q18 - Does the proposed design/solution meet the security requirements to ensure that software development by/on behalf of Royal Mail Group (RMG) minimizes and prevents the risk/impact of information security following ISS-014 - Secure Product Development Standard</simpara></entry>
+<entry align="left" valign="top"></entry>
+<entry align="left" valign="top"></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara>TDA Q19 - Does the design/solution follow the defined set of requirements for security testing providing confirmation that all RMG systems and processes are sufficiently resilient in line with RMG risk appetite, with all controls proven effective as outlined in ISS-015 - Cyber Security Testing Standard?</simpara></entry>
+<entry align="left" valign="top"></entry>
+<entry align="left" valign="top"></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara>TDA Q20 - Have all individuals working on this design/project for Royal Mail Group Ltd, including employees, workers, self-employed contractors, consultants, and agency workers (referred to as “our people”) completed the required cybersecurity training and awareness defined in ISS-016 - Cyber Security Training and Awareness Standard?</simpara></entry>
+<entry align="left" valign="top"></entry>
+<entry align="left" valign="top"></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara>TDA Q21 - Does the design/project follow the secure practices to manage secrets and cryptographic keys following ISS-017 - Secret &amp; Key Management Standard alongside ISS-002 - Cryptography Standard which defines the acceptable cryptographic algorithms and protocols for the secure transmission and storage of data?</simpara></entry>
+<entry align="left" valign="top"></entry>
+<entry align="left" valign="top"></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara>TDA Q22 - Has the design/project determined what software needs to be installed and minimum logging level for Syslog, Common Event Format (CEF) logs and Windows events to maintain visibility across the Royal Mail’s infrastructure. Application logs are based on use case and will be assessed by the Cyber Engineering team using requirements/tools available. i:e Data connector/Logic App etc in line with ISS-020 - SIEM System Monitoring Standard?</simpara></entry>
+<entry align="left" valign="top"></entry>
+<entry align="left" valign="top"></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara>TDA Q23 - Does this design/project meet the requirements for Royal Mail Group (RMG) Cyber Threat Intelligence (CTI) programme and have these been aligned to ISS-023 - Threat Intelligence Standard?</simpara></entry>
+<entry align="left" valign="top"></entry>
+<entry align="left" valign="top"></entry>
+</row>
+</tbody>
+</tgroup>
+</table>
+<formalpara>
+<title>Cyber Architecture Standards-Aligned NFRs</title>
+<para><emphasis role="strong"><phrase role="red"><emphasis>LeanIX Link to be provided for cyber security NFRs</emphasis></phrase></emphasis></para>
+</formalpara>
+<important>
+<simpara>LeanIX should be used as a reference for the cyber NFRs that need to be met for the solution. The solution should meet all the requirements listed in LeanIX. Any deviations from the mandatory requirements must be documented with a formal risk acceptance, including compensating controls and an expiry date.</simpara>
+</important>
+</section>
+<section xml:id="_data_flow_diagram_threat_modelling">
+<title>Data Flow Diagram / Threat Modelling</title>
+
+</section>
+<section xml:id="_stride_mitigation">
+<title>STRIDE Mitigation</title>
+<important>
+<simpara>This section should contain a <emphasis role="strong">STRIDE</emphasis> Threat Model with clearly defined threat boundaries and mitigation. The <emphasis role="strong">STRIDE</emphasis> model is a widely used framework for identifying and categorizing potential security threats in software systems. It helps architects and developers systematically analyze the system&#8217;s architecture to identify vulnerabilities and design appropriate countermeasures. Cyber architects should use the <emphasis role="strong">STRIDE</emphasis> model to assess the security posture of the system and ensure that it meets the required security standards.They need to work with Solution architects to ensure that the <emphasis role="strong">STRIDE</emphasis> model is comprehensive and covers all relevant aspects of the system&#8217;s architecture. The <emphasis role="strong">STRIDE</emphasis> model should be used in conjunction with other security best practices and standards to ensure that the system is secure and resilient against potential threats. Solution architects must ensure that the <emphasis role="strong">STRIDE</emphasis> model is integrated into the overall architecture and design of the system, and that it is regularly reviewed and updated as the system evolves. The <emphasis role="strong">STRIDE</emphasis> model should be used to inform security testing and validation activities, and to ensure that any identified vulnerabilities are addressed in a timely manner.</simpara>
+</important>
+<table frame="all" rowsep="1" colsep="1">
+<title>STRIDE Mitigation</title>
+<?dbhtml table-width="100%"?>
+<?dbfo table-width="100%"?>
+<?dblatex table-width="100%"?>
+<tgroup cols="4">
+<colspec colname="col_1" colwidth="85*"/>
+<colspec colname="col_2" colwidth="106.25*"/>
+<colspec colname="col_3" colwidth="148.75*"/>
+<colspec colname="col_4" colwidth="85*"/>
+<thead>
+<row>
+<entry align="left" valign="top"><emphasis role="strong">STRIDE</emphasis></entry>
+<entry align="left" valign="top"><emphasis role="strong">Issue</emphasis></entry>
+<entry align="left" valign="top"><emphasis role="strong">Mitigation</emphasis></entry>
+<entry align="left" valign="top"><emphasis role="strong">Evidence</emphasis></entry>
+</row>
+</thead>
+<tbody>
+<row>
+<entry align="left" valign="top"><simpara><emphasis role="strong">Spoofing</emphasis></simpara></entry>
+<entry align="left" valign="top"><simpara><emphasis role="strong">Spoofing: User Identity</emphasis> - Attacker pretends to be a legitimate OPG/COM user to access FDS.<?asciidoc-br?>
+                             <emphasis role="strong">Spoofing: Service Identity</emphasis> - Attacker pretends to be a trusted upstream system (MQ/FTPS/JoinedUp).</simpara></entry>
+<entry align="left" valign="top"><simpara><emphasis role="strong">Web Application Firewall (WAF)</emphasis> - Protects FDS frontend and APIs from common web attacks<?asciidoc-br?>
+                             <emphasis role="strong">APIM Security Policies</emphasis> - Rate limiting, JWT validation, IP filtering, schema validation<?asciidoc-br?>
+                             <emphasis role="strong">Role-Based Access Control (RBAC)</emphasis> - Ensures least-privilege access for users and services<?asciidoc-br?>
+                             <emphasis role="strong">MQ Authentication &amp; ACLs</emphasis> - Prevents spoofing and tampering on MQ channels, Service identity validation</simpara></entry>
+<entry align="left" valign="top"></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara><emphasis role="strong">Tampering</emphasis></simpara></entry>
+<entry align="left" valign="top"><simpara><emphasis role="strong">Tampering: API Payloads</emphasis> - Modification of duty, timesheet or attendance data in transit.<?asciidoc-br?>
+                             <emphasis role="strong">Tampering: Import Files</emphasis> - Modification of files sent via FTPS before ingestion.</simpara></entry>
+<entry align="left" valign="top"><simpara><emphasis role="strong">TLS Encryption</emphasis> - Encrypts API traffic<?asciidoc-br?>
+                             <emphasis role="strong">APIM Security Policies</emphasis> - Rate limiting, JWT validation, IP filtering, schema validation, Schema validation<?asciidoc-br?>
+                             <emphasis role="strong">FTPS Hardening</emphasis> - Ensures secure file transfer with MFA, IP allowlists, and checksums, Checksums &amp; secure transfer<?asciidoc-br?>
+                             <emphasis role="strong">Input Validation</emphasis> - Prevents SQL injection and malformed payloads, Rejects malformed data</simpara></entry>
+<entry align="left" valign="top"></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara><emphasis role="strong">Repudiation</emphasis></simpara></entry>
+<entry align="left" valign="top"><simpara><emphasis role="strong">Repudiation: User Actions</emphasis> - Users deny having approved duties or timesheets.<?asciidoc-br?>
+                             <emphasis role="strong">Repudiation: Admin Changes</emphasis> - Admins deny configuration or security‑relevant changes.</simpara></entry>
+<entry align="left" valign="top"><simpara><emphasis role="strong">Audit Logging</emphasis> - Captures user and admin actions for non-repudiation, Immutable logs, Admin activity logging'<?asciidoc-br?>
+                             <emphasis role="strong">SIEM Monitoring</emphasis> - Detects anomalies, DoS attempts, tampering, and suspicious activity, Alerting on suspicious actions</simpara></entry>
+<entry align="left" valign="top"></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara><emphasis role="strong">Information Disclosure</emphasis></simpara></entry>
+<entry align="left" valign="top"><simpara><emphasis role="strong">Information Disclosure: PII &amp; HR Data</emphasis> - Exposure of personal and HR data from FDS DB and staging.<?asciidoc-br?>
+                             <emphasis role="strong">Information Disclosure: Integration Data</emphasis> - Exposure of data in transit via MQ/FTPS/Data Platform.</simpara></entry>
+<entry align="left" valign="top"><simpara><emphasis role="strong">TLS Encryption</emphasis> - Encrypts data in transit<?asciidoc-br?>
+                             <emphasis role="strong">Encryption at Rest</emphasis> - Protects DB contents, Protects FDS DB, Staging DB, and exported files<?asciidoc-br?>
+                             <emphasis role="strong">Azure Key Vault</emphasis> - Protects secrets, connection strings, certificates, Protects credentials<?asciidoc-br?>
+                             <emphasis role="strong">Role-Based Access Control (RBAC)</emphasis> - Ensures least-privilege access for users and services, Restricts DB access</simpara></entry>
+<entry align="left" valign="top"></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara><emphasis role="strong">Denial of Service (DoS)</emphasis></simpara></entry>
+<entry align="left" valign="top"><simpara><emphasis role="strong">DoS: Frontend &amp; APIs</emphasis> - Overwhelming FDS frontend and APIs with traffic.<?asciidoc-br?>
+                             <emphasis role="strong">DoS: Integration Channels</emphasis> - Flooding MQ/FTPS to disrupt data flows.</simpara></entry>
+<entry align="left" valign="top"><simpara><emphasis role="strong">Web Application Firewall (WAF)</emphasis> - Protects FDS frontend and APIs from common web attacks, Blocks volumetric attacks<?asciidoc-br?>
+                             <emphasis role="strong">APIM Security Policies</emphasis> - Rate limiting<?asciidoc-br?>
+                             <emphasis role="strong">SIEM Monitoring</emphasis> - Detects MQ flooding</simpara></entry>
+<entry align="left" valign="top"></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara><emphasis role="strong">Elevation of Privilege</emphasis></simpara></entry>
+<entry align="left" valign="top"><simpara><emphasis role="strong">Elevation of Privilege: Application</emphasis> - Exploiting application flaws to gain higher privileges.<?asciidoc-br?>
+                             <emphasis role="strong">Elevation of Privilege: Database</emphasis> - Abusing DB permissions to bypass application controls.</simpara></entry>
+<entry align="left" valign="top"><simpara><emphasis role="strong">Role-Based Access Control (RBAC)</emphasis> - Ensures least-privilege access for users and services, Restricts backend privileges<?asciidoc-br?>
+                             <emphasis role="strong">Input Validation</emphasis> - Prevents injection<?asciidoc-br?>
+                             <emphasis role="strong">Azure Key Vault</emphasis> - Protects DB credentials<?asciidoc-br?>
+                             <emphasis role="strong">Encryption at Rest</emphasis> - Protects DB files</simpara></entry>
+<entry align="left" valign="top"></entry>
+</row>
+</tbody>
+</tgroup>
+</table>
+</section>
+<section xml:id="_identity_access_management_iam">
+<title>Identity &amp; Access Management (IAM)</title>
+<simpara><emphasis>This section should explain proposed authentication and authorization mechanism. It should include Role Based Access Control (RBAC), Multi-factor Authentication (MFA) etc. with details around 3rd Party/Admin/Break Glass/Customer/User -User Access Matrix, Groups, Roles, Permissions, Access method, Secure Access Method, MFA etc.</emphasis></simpara>
+<note>
+<simpara>A break glass account (or emergency access account) is a highly privileged IT account designed exclusively for emergencies. It acts as a digital failsafe to bypass standard security controls (like SSO, MFA, or Conditional Access policies) so administrators can restore system access if regular channels fail.</simpara>
+</note>
+</section>
+<section xml:id="_usage_of_ai_if_applicable">
+<title>Usage of AI (<phrase role="green">If Applicable</phrase>)</title>
+<note>
+<simpara>This should contain Purpose of AI (Use Case), Approved use of AI, Securing the AI etc.</simpara>
+</note>
+</section>
+<section xml:id="_security_raid_log">
+<title>Security RAID Log</title>
+<informaltable frame="all" rowsep="1" colsep="1">
+<?dbhtml table-width="100%"?>
+<?dbfo table-width="100%"?>
+<?dblatex table-width="100%"?>
+<tgroup cols="5">
+<colspec colname="col_1" colwidth="42.5*"/>
+<colspec colname="col_2" colwidth="42.5*"/>
+<colspec colname="col_3" colwidth="148.75*"/>
+<colspec colname="col_4" colwidth="42.5*"/>
+<colspec colname="col_5" colwidth="148.75*"/>
+<thead>
+<row>
+<entry align="left" valign="top"><emphasis role="strong">ID</emphasis></entry>
+<entry align="left" valign="top"><emphasis role="strong">Type</emphasis></entry>
+<entry align="left" valign="top"><emphasis role="strong">Risk / Debt</emphasis></entry>
+<entry align="left" valign="top"><emphasis role="strong">Level</emphasis></entry>
+<entry align="left" valign="top"><emphasis role="strong">Mitigation</emphasis></entry>
+</row>
+</thead>
+<tbody>
+<row>
+<entry align="left" valign="top"></entry>
+<entry align="left" valign="top"></entry>
+<entry align="left" valign="top"></entry>
+<entry align="left" valign="top"></entry>
+<entry align="left" valign="top"></entry>
+</row>
+</tbody>
+</tgroup>
+</informaltable>
+</section>
+<section xml:id="_application_business_criticality_rating">
+<title>Application Business Criticality Rating</title>
+
+</section>
+<section xml:id="_quantum_cryptography_secure_tbc">
+<title>Quantum Cryptography Secure <phrase role="red">(TBC)</phrase></title>
+
+</section>
+<section xml:id="_active_directory_tier_level_tbc">
+<title>Active Directory Tier Level <phrase role="red">(TBC)</phrase></title>
+
+</section>
+<section xml:id="_privileged_access_requirements_cyberark">
+<title>Privileged Access Requirements (CyberArk)</title>
+
+</section>
+<section xml:id="_user_provisioning_requirement_sailpoint">
+<title>User Provisioning Requirement (SailPoint)</title>
+
+</section>
+<section xml:id="_key_management_services_requirements">
+<title>Key Management Services Requirements</title>
+<simpara><?asciidoc-pagebreak?></simpara>
+</section>
+</section>
+<section xml:id="_data_architecture">
+<title>Data Architecture</title>
+<simpara><emphasis role="strong">Content</emphasis></simpara>
+<simpara><emphasis>Data architecture is the blueprint that dictates how an organization acquires, stores, transforms, distributes, and consumes data. It provides a standardized framework that connects business objectives to technical infrastructure, ensuring data is secure, consistent, scalable, and readily accessible for operations and AI applications.</emphasis></simpara>
+<simpara><emphasis role="strong"><emphasis>Core Components</emphasis></emphasis></simpara>
+<simpara><emphasis>A robust data architecture consists of several interconnected building blocks:</emphasis></simpara>
+<itemizedlist>
+<listitem>
+<simpara><emphasis role="strong">Data Models</emphasis>: <emphasis>Blueprints that map data structures, relationships, and business rules.</emphasis></simpara>
+</listitem>
+<listitem>
+<simpara><emphasis role="strong">Data Flow &amp; Pipelines</emphasis>: <emphasis>Systems that ingest, process, and move data from sources to destinations.</emphasis></simpara>
+</listitem>
+<listitem>
+<simpara><emphasis role="strong">Data Storage</emphasis>: <emphasis>The repositories where data lives, such as Data Lakes, Data Warehouses, or Lakehouses.</emphasis></simpara>
+</listitem>
+<listitem>
+<simpara><emphasis role="strong">Data Governance &amp; Security</emphasis>: <emphasis>Policies, standards, and access controls that maintain data quality and ensure regulatory compliance.</emphasis></simpara>
+</listitem>
+</itemizedlist>
+<simpara><emphasis role="strong">Motivation</emphasis></simpara>
+<simpara><emphasis>A robust data architecture aligns data systems with business goals, providing a blueprint for data management, storage, and usage. Its core benefits include unified governance, improved data quality, and scalable infrastructure that accelerates real-time analytics and artificial intelligence (AI) adoption.</emphasis></simpara>
+<simpara><emphasis role="strong"><emphasis>Key Benefits of Data Architecture</emphasis></emphasis></simpara>
+<itemizedlist>
+<listitem>
+<simpara><emphasis role="strong">Eliminates Data Silos</emphasis>: <emphasis>Unifies disparate systems, allowing departments to securely share data and establish a reliable "single version of the truth".</emphasis></simpara>
+</listitem>
+<listitem>
+<simpara><emphasis role="strong">Enhanced Data Quality</emphasis>: <emphasis>Enforces consistent data standards and validation rules to minimize duplication and prevent inaccurate reporting.</emphasis></simpara>
+</listitem>
+<listitem>
+<simpara><emphasis role="strong">Scalability &amp; Cost Optimization</emphasis>: <emphasis>Optimizes cloud storage and data processing, reducing hardware needs and allocating operational resources efficiently.</emphasis></simpara>
+</listitem>
+<listitem>
+<simpara><emphasis role="strong">Unified Governance &amp; Compliance</emphasis>: <emphasis>Implements centralized protocols to secure sensitive information and meet regulatory frameworks like GDPR.</emphasis></simpara>
+</listitem>
+<listitem>
+<simpara><emphasis role="strong">Accelerated Innovation</emphasis>: <emphasis>Provides a reliable, controlled foundation for advanced technologies like AI, machine learning, and real-time predictive analytics.</emphasis></simpara>
+</listitem>
+</itemizedlist>
+<simpara><emphasis role="strong">Form</emphasis></simpara>
+<simpara><emphasis>Data Architecture should be captured in form of <emphasis role="strong">Data Models</emphasis> and <emphasis role="strong">Data Flow Diagrams</emphasis> alongside a bunch of information captured in various tables and text paragraphs. The following sections outline the key information that should be captured for any new interface or data product created.</emphasis></simpara>
+<section xml:id="_data_architecture_blueprint">
+<title>Data Architecture Blueprint</title>
+<section xml:id="_conceptual_data_models">
+<title>Conceptual Data Models</title>
+<simpara><emphasis>High-level abstract representations showing core business entities and their relationships.</emphasis></simpara>
+</section>
+<section xml:id="_data_flow_diagram">
+<title>Data Flow Diagram</title>
+<simpara><emphasis>Visual maps illustrating where data originates, the paths it takes through pipelines, and final consumption points.</emphasis></simpara>
+</section>
+<section xml:id="_storage_strategies">
+<title>Storage Strategies</title>
+<simpara><emphasis>Locations and technologies for data at rest, categorized by workload (e.g., Relational, NoSQL, Data Platform, Caching).</emphasis></simpara>
+</section>
+</section>
+<section xml:id="_integration_and_processing">
+<title>Integration and Processing</title>
+<section xml:id="_integration_patterns">
+<title>Integration Patterns</title>
+<simpara><emphasis>Defined approaches for data movement (e.g., ETL vs. ELT, batch processing, real-time streaming).</emphasis></simpara>
+</section>
+<section xml:id="_data_sources_and_destinations">
+<title>Data Sources and Destinations</title>
+<simpara><emphasis>Explicit listings of all external/internal input sources and target destinations.</emphasis></simpara>
+</section>
+<section xml:id="_ingestion_methods">
+<title>Ingestion Methods</title>
+<simpara><emphasis>Tools and scenarios used to acquire the data (e.g., full loads, incremental syncing, API pulls).</emphasis></simpara>
+<note>
+<simpara>For any new interface</simpara>
+</note>
+</section>
+</section>
+<section xml:id="_ownership_model_data_owner_data_steward_data_consumer">
+<title>Ownership model (data owner, data steward, data consumer)</title>
+<table frame="all" rowsep="1" colsep="1">
+<title>Data Ownership Model</title>
+<?dbhtml table-width="100%"?>
+<?dbfo table-width="100%"?>
+<?dblatex table-width="100%"?>
+<tgroup cols="4">
+<colspec colname="col_1" colwidth="170*"/>
+<colspec colname="col_2" colwidth="85*"/>
+<colspec colname="col_3" colwidth="85*"/>
+<colspec colname="col_4" colwidth="85*"/>
+<thead>
+<row>
+<entry align="center" valign="top"><emphasis role="strong">Interface</emphasis></entry>
+<entry align="center" valign="top"><emphasis role="strong">Owner</emphasis></entry>
+<entry align="center" valign="top"><emphasis role="strong">Steward</emphasis></entry>
+<entry align="center" valign="top"><emphasis role="strong">Consumer</emphasis></entry>
+</row>
+</thead>
+<tbody>
+<row>
+<entry align="left" valign="top"></entry>
+<entry align="left" valign="top"></entry>
+<entry align="left" valign="top"></entry>
+<entry align="left" valign="top"></entry>
+</row>
+</tbody>
+</tgroup>
+</table>
+</section>
+<section xml:id="_policies_data_classification_public_internal_confidential_restricted_retention_e_g_5_years_compliance_gdpr_hipaa_etc">
+<title>Policies: Data classification (<phrase role="green">public</phrase>, <phrase role="yellow">internal</phrase>, <phrase role="red">confidential</phrase>, <phrase role="purple">restricted</phrase>), Retention (e.g., 5 years), Compliance (GDPR, HIPAA, etc.)</title>
+<table frame="all" rowsep="1" colsep="1">
+<title>Data Policies</title>
+<?dbhtml table-width="60%"?>
+<?dbfo table-width="60%"?>
+<?dblatex table-width="60%"?>
+<tgroup cols="2">
+<colspec colname="col_1" colwidth="127.5*"/>
+<colspec colname="col_2" colwidth="127.5*"/>
+<tbody>
+<row>
+<entry align="left" valign="top"><simpara><emphasis role="strong">Data Classification</emphasis></simpara></entry>
+<entry align="left" valign="top"></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara><emphasis role="strong">Data Categorization</emphasis></simpara></entry>
+<entry align="left" valign="top"></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara><emphasis role="strong">Retention Policy</emphasis></simpara></entry>
+<entry align="left" valign="top"></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara><emphasis role="strong">Data Compliance</emphasis></simpara></entry>
+<entry align="left" valign="top"></entry>
+</row>
+</tbody>
+</tgroup>
+</table>
+<note>
+<simpara>Specify any new data product created or any of the existing data products used. For each data product:</simpara>
+</note>
+</section>
+<section xml:id="_purpose_business_use_case">
+<title>Purpose / business use case</title>
+
+</section>
+<section xml:id="_product_owner_business_technical">
+<title>Product owner (business + technical)</title>
+
+</section>
+<section xml:id="_consumers_teams_applications">
+<title>Consumers (teams, applications)</title>
+
+</section>
+<section xml:id="_value_statement_why_it_exists">
+<title>Value statement (why it exists)</title>
+
+</section>
+<section xml:id="_mapping_between_new_interface_and_data_product">
+<title>Mapping between new interface and data product</title>
+<note>
+<simpara>Data Product Architecture</simpara>
+</note>
+</section>
+<section xml:id="_data_product_boundaries_e_g_domain_specific_cross_domain">
+<title>Data product boundaries (e.g., domain-specific, cross-domain)</title>
+
+</section>
+<section xml:id="_interaction_between_data_products">
+<title>Interaction between data products</title>
+
+</section>
+<section xml:id="_event_driven_batch_flows">
+<title>Event-driven / batch flows</title>
+<simpara><?asciidoc-pagebreak?></simpara>
+</section>
+</section>
+<section xml:id="_cross_cutting_concepts">
+<title>Cross-cutting Concepts</title>
+<simpara><emphasis role="strong">Content</emphasis></simpara>
+<simpara><emphasis>This section describes crosscutting concepts (practices, patterns,
+regulations or solution ideas). Such concepts are often related to
+multiple building blocks.</emphasis></simpara>
+<simpara><emphasis role="strong">Motivation</emphasis></simpara>
+<simpara><emphasis>Concepts form the basis for <emphasis role="strong">conceptual integrity</emphasis> (consistency,
+homogeneity) of the architecture. Thus, they are an important
+contribution to achieve inner qualities of your system.</emphasis></simpara>
+<simpara><emphasis>This is the place in the template that we provided for a cohesive
+specification of such concepts.</emphasis></simpara>
+<simpara><emphasis>Many of these concepts relate to or influence several of your building
+blocks.</emphasis></simpara>
+<simpara><emphasis role="strong">Form</emphasis></simpara>
+<simpara><emphasis>The form can be varied:</emphasis></simpara>
+<itemizedlist>
+<listitem>
+<simpara>concept papers with any kind of structure</simpara>
+</listitem>
+<listitem>
+<simpara>example implementations,especially for technical concepts</simpara>
+</listitem>
+<listitem>
+<simpara>cross-cutting model excerpts or scenarios using notations of the
+architecture views</simpara>
+</listitem>
+</itemizedlist>
+<simpara><emphasis role="strong">Structure</emphasis></simpara>
+<simpara><emphasis>Pick <emphasis role="strong">only</emphasis> the most-needed topics for your system and assign each a
+level-2 heading in this section (e.g. 8.1, 8.2 etc).</emphasis></simpara>
+<section xml:id="_concept_1">
+<title><emphasis>&lt;Concept 1&gt;</emphasis></title>
+<simpara><emphasis>&lt;explanation&gt;</emphasis></simpara>
+</section>
+<section xml:id="_concept_2">
+<title><emphasis>&lt;Concept 2&gt;</emphasis></title>
+<simpara><emphasis>&lt;explanation&gt;</emphasis></simpara>
+<simpara>…​</simpara>
+</section>
+<section xml:id="_concept_n">
+<title><emphasis>&lt;Concept n&gt;</emphasis></title>
+<simpara><emphasis>&lt;explanation&gt;</emphasis></simpara>
+<warning>
+<simpara>DO NOT ATTEMPT to cover all of the topics of the aforementioned diagram.</simpara>
+</warning>
+<simpara><emphasis role="strong">Further Information</emphasis></simpara>
+<simpara><emphasis>Some topics within systems often concern multiple building blocks,
+hardware elements or development processes. It might be easier to
+communicate or document such <emphasis role="strong">cross-cutting</emphasis> topics at a central
+location, instead of repeating them in the description of the concerned
+building blocks, hardware elements or development processes.
+Certain concepts might concern <emphasis role="strong">all</emphasis> elements of a system, others might
+only be relevant for a few. In the diagram above, logging concerns all
+three components, whereas security is relevant only for two components.</emphasis></simpara>
+<simpara><emphasis>See</emphasis> <link xl:href="https://docs.arc42.org/section-8/">Concepts</link> <emphasis>in the arc42
+documentation.</emphasis></simpara>
+<example>
+<title>Cross-Cutting Concepts</title>
+<itemizedlist>
+<listitem>
+<simpara>Identity, Authentication and Authorisation</simpara>
+</listitem>
+<listitem>
+<simpara>Audit and Traceability</simpara>
+</listitem>
+<listitem>
+<simpara>Integration Resilience</simpara>
+</listitem>
+<listitem>
+<simpara>Data Privacy and Retention</simpara>
+</listitem>
+<listitem>
+<simpara>Logging, Monitoring and Observability</simpara>
+</listitem>
+<listitem>
+<simpara>User-experience consistency across the merged web app shell</simpara>
+</listitem>
+</itemizedlist>
+</example>
+<simpara><?asciidoc-pagebreak?></simpara>
+</section>
+</section>
+<section xml:id="_architecture_decisions">
+<title>Architecture Decisions</title>
+<simpara><emphasis role="strong">Contents</emphasis></simpara>
+<simpara><emphasis>Important, expensive, large scale or risky architecture decisions
+including rationales. With "decisions" we mean selecting one alternative
+based on given criteria.</emphasis></simpara>
+<simpara><emphasis>Please use your judgement to decide whether an architectural decision
+should be documented here in this central section or whether you better
+document it locally (e.g. within the white box template of one building
+block).</emphasis></simpara>
+<simpara><emphasis>Avoid redundancy. <phrase role="red">Refer to section 4</phrase>, where you already captured the
+most important decisions of your architecture.</emphasis></simpara>
+<important>
+<simpara>Only capture those decisions that deviates from well established patterns and practices. We also need to capture decisions where better option was available but we had to stick with approved pattern.</simpara>
+</important>
+<simpara><emphasis role="strong">Motivation</emphasis></simpara>
+<simpara><emphasis>Stakeholders of your system should be able to comprehend and retrace
+your decisions.</emphasis></simpara>
+<simpara><emphasis role="strong">Form</emphasis></simpara>
+<simpara><emphasis>Various options:</emphasis></simpara>
+<itemizedlist>
+<listitem>
+<simpara>ADR
+<link xl:href="https://cognitect.com/blog/2011/11/15/documenting-architecture-decisions">Documenting
+Architecture Decisions</link> for every important decision</simpara>
+</listitem>
+<listitem>
+<simpara>List or table, ordered by importance and consequences or:</simpara>
+</listitem>
+<listitem>
+<simpara>more detailed in form of separate sections per decision</simpara>
+</listitem>
+</itemizedlist>
+<section xml:id="_adr_001_title_of_the_decision">
+<title>ADR-001 - Title of the decision</title>
+<table frame="all" rowsep="1" colsep="1">
+<title>ADR-001</title>
+<?dbhtml table-width="100%"?>
+<?dbfo table-width="100%"?>
+<?dblatex table-width="100%"?>
+<tgroup cols="2">
+<colspec colname="col_1" colwidth="102*"/>
+<colspec colname="col_2" colwidth="323*"/>
+<thead>
+<row>
+<entry align="left" valign="top"><emphasis role="strong">Aspect</emphasis></entry>
+<entry align="left" valign="top"><emphasis role="strong">Detail</emphasis></entry>
+</row>
+</thead>
+<tbody>
+<row>
+<entry align="left" valign="top"><simpara>Status</simpara></entry>
+<entry align="left" valign="top"><simpara>Accepted/Rejected/Proposed</simpara></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara>Context</simpara></entry>
+<entry align="left" valign="top"></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara>Decision</simpara></entry>
+<entry align="left" valign="top"></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara>Consequences</simpara></entry>
+<entry align="left" valign="top"></entry>
+</row>
+</tbody>
+</tgroup>
+</table>
+</section>
+<section xml:id="_adr_002_title_of_the_decision">
+<title>ADR-002 - Title of the decision</title>
+<table frame="all" rowsep="1" colsep="1">
+<title>ADR-002</title>
+<?dbhtml table-width="100%"?>
+<?dbfo table-width="100%"?>
+<?dblatex table-width="100%"?>
+<tgroup cols="2">
+<colspec colname="col_1" colwidth="102*"/>
+<colspec colname="col_2" colwidth="323*"/>
+<thead>
+<row>
+<entry align="left" valign="top"><emphasis role="strong">Aspect</emphasis></entry>
+<entry align="left" valign="top"><emphasis role="strong">Detail</emphasis></entry>
+</row>
+</thead>
+<tbody>
+<row>
+<entry align="left" valign="top"><simpara>Status</simpara></entry>
+<entry align="left" valign="top"><simpara>Accepted/Rejected/Proposed</simpara></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara>Context</simpara></entry>
+<entry align="left" valign="top"></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara>Decision</simpara></entry>
+<entry align="left" valign="top"></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara>Consequences</simpara></entry>
+<entry align="left" valign="top"></entry>
+</row>
+</tbody>
+</tgroup>
+</table>
+<simpara><?asciidoc-pagebreak?></simpara>
+</section>
+</section>
+<section xml:id="_quality_requirements">
+<title>Quality Requirements</title>
+<simpara><emphasis role="strong">Content</emphasis></simpara>
+<simpara><emphasis>This section contains all relevant quality requirements.</emphasis></simpara>
+<simpara><emphasis>The most important of these requirements have already been described in
+section 1.2. (quality goals), therefore they should only be referenced
+here. In this section 10 you should also capture quality requirements
+with lesser importance, which will not create high risks when they are
+not fully achieved (but might be <emphasis role="strong">nice-to-have</emphasis>).</emphasis></simpara>
+<simpara><emphasis role="strong">Motivation</emphasis></simpara>
+<simpara><emphasis>Since quality requirements will have a lot of influence on architectural
+decisions you should know what qualities are really important for your
+stakeholders, in a specific and measurable way.</emphasis></simpara>
+<section xml:id="_quality_requirements_overview">
+<title>Quality Requirements Overview</title>
+<simpara><emphasis role="strong">Content</emphasis></simpara>
+<simpara><emphasis>An overview or summary of quality requirements.</emphasis></simpara>
+<simpara><emphasis>This section should provide an overview of quality requirements at a
+category level (Like performance, scalability, interoperability,
+security etc.) and how those requirements are met by the proposed
+architecture</emphasis></simpara>
+<simpara><emphasis role="strong">Motivation</emphasis></simpara>
+<simpara><emphasis>Often we encounter dozens (or even hundreds) of detailed quality
+requirements. In this overview section you should try to summarize, e.g.
+by describing categories or topics (as suggested by
+<link xl:href="https://www.iso.org/obp/ui/#iso:std:iso-iec:25010:ed-2:v1:en">ISO
+25010:2023</link> or <link xl:href="https://quality.arc42.org">Q42</link>)</emphasis></simpara>
+<simpara><emphasis>If these summary descriptions are already precise, specific enough and
+measurable, you may skip section 10.2.</emphasis></simpara>
+<simpara><emphasis role="strong">Form</emphasis></simpara>
+<simpara><emphasis>Use a simple table in which each line contains a category or topic and a
+short description of the quality requirement. Alternatively, you may use
+a mind map to structure these quality requirements. In literature, the
+idea of a <emphasis role="strong">quality attribute tree</emphasis> has also been described, which puts
+the generic term "quality" as the root and uses a tree-like refinement
+of the term "quality". [Bass&#43;21] introduced the term
+<emphasis role="strong">"Quality Attribute Utility Tree"</emphasis> for this purpose.</emphasis></simpara>
+<informaltable frame="all" rowsep="1" colsep="1">
+<?dbhtml table-width="99%"?>
+<?dbfo table-width="99%"?>
+<?dblatex table-width="99%"?>
+<tgroup cols="2">
+<colspec colname="col_1" colwidth="109.395*"/>
+<colspec colname="col_2" colwidth="311.355*"/>
+<thead>
+<row>
+<entry align="left" valign="top"><emphasis role="strong">Category (ISO 25010)</emphasis></entry>
+<entry align="left" valign="top"><emphasis role="strong">Quality requirement</emphasis></entry>
+</row>
+</thead>
+<tbody>
+<row>
+<entry align="left" valign="top"><simpara>Functional Suitability</simpara></entry>
+<entry align="left" valign="top"></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara>Performance Efficiency</simpara></entry>
+<entry align="left" valign="top"></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara>Compatibility</simpara></entry>
+<entry align="left" valign="top"></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara>Usability</simpara></entry>
+<entry align="left" valign="top"></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara>Reliability</simpara></entry>
+<entry align="left" valign="top"></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara>Security</simpara></entry>
+<entry align="left" valign="top"></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara>Maintainability</simpara></entry>
+<entry align="left" valign="top"></entry>
+</row>
+<row>
+<entry align="left" valign="top"><simpara>Portability</simpara></entry>
+<entry align="left" valign="top"></entry>
+</row>
+</tbody>
+</tgroup>
+</informaltable>
+</section>
+<section xml:id="_quality_scenarios_selected">
+<title>Quality Scenarios (selected)</title>
+<simpara><emphasis role="strong">Content</emphasis></simpara>
+<simpara><emphasis>Quality scenarios make quality requirements concrete and allow to decide
+whether they are fulfilled (in the sense of acceptance criteria). Ensure
+that your scenarios are specific and measurable.</emphasis></simpara>
+<simpara><emphasis>This section is complementary to NFRs defined in LeanIX. This provides
+an acceptance criteria for each NFR that could be tested. The
+distinction between an NFR and Quality Scenarios could be understood
+with the following examples:</emphasis></simpara>
+<informalexample>
+<simpara><emphasis role="strong"><phrase role="blue">NFR</phrase></emphasis> – All PII data should be encrypted at rest</simpara>
+<simpara><emphasis role="strong"><phrase role="green">Quality Scenario</phrase></emphasis> – All PII data should be encrypted using AES256 before
+storing in the database.</simpara>
+<simpara>In the above example – Just by looking at the NFR alone, we cannot test
+it but the associated quality scenario makes it testable</simpara>
+<simpara><emphasis role="strong"><phrase role="blue">NFR</phrase></emphasis> – All save operations should be complete in less than 5 seconds</simpara>
+<simpara><emphasis role="strong"><phrase role="green">Quality Scenario</phrase></emphasis> – Upon clicking on Save button on employee edit screen,
+record should be saved within 3 seconds and success message should be
+displayed on the screen.</simpara>
+</informalexample>
+<simpara><emphasis>Key point here is <emphasis role="strong"><phrase role="red">“measurable”</phrase></emphasis>. We can link either LeanIX or any other
+form of document(s) where these quality scenarios are captured.</emphasis></simpara>
+<simpara><emphasis>Two kinds of scenarios are especially useful:</emphasis></simpara>
+<itemizedlist>
+<listitem>
+<simpara><emphasis role="strong">Usage scenarios</emphasis> <emphasis>(also called application scenarios or use case
+scenarios) describe the system’s runtime reaction to a certain stimulus.
+This also includes scenarios that describe the system’s efficiency or
+performance. Example: The system reacts to a user’s request within one
+second.</emphasis></simpara>
+</listitem>
+<listitem>
+<simpara><emphasis role="strong">Change scenarios</emphasis> <emphasis>describe the desired effect of a modification or
+extension of the system or of its immediate environment. Example:
+Additional functionality is implemented or requirements for a quality
+attribute change, and the effort or duration of the change is measured.</emphasis></simpara>
+</listitem>
+</itemizedlist>
+<simpara><emphasis role="strong">Form</emphasis></simpara>
+<simpara><emphasis>Typical information for detailed scenarios include the following:</emphasis></simpara>
+<simpara><emphasis>In short form (favoured in the Q42 model):</emphasis></simpara>
+<itemizedlist>
+<listitem>
+<simpara><emphasis role="strong">Context/Background</emphasis>: <emphasis>What kind of system or component, what is the
+envirionment or situation?</emphasis></simpara>
+</listitem>
+<listitem>
+<simpara><emphasis role="strong">Source/Stimulus</emphasis>: <emphasis>Who or what initiates or triggers a <emphasis role="strong">behaviour</emphasis>, <emphasis role="strong">reaction</emphasis> or <emphasis role="strong">action</emphasis>.</emphasis></simpara>
+</listitem>
+<listitem>
+<simpara><emphasis role="strong">Metric/Acceptance Criteria</emphasis>: <emphasis>A response including a <emphasis role="strong">measure</emphasis> or <emphasis role="strong">metric</emphasis>.</emphasis></simpara>
+</listitem>
+</itemizedlist>
+<simpara><emphasis>The long form of scenarios (favoured by the SEI and
+[Bass&#43;21]) is more detailed and includes the following
+information:</emphasis></simpara>
+<itemizedlist>
+<listitem>
+<simpara><emphasis role="strong">Scenario ID</emphasis>: <emphasis>A unique identifier for the scenario.</emphasis></simpara>
+</listitem>
+<listitem>
+<simpara><emphasis role="strong">Scenario Name</emphasis>: <emphasis>A short, descriptive name for the scenario.</emphasis></simpara>
+</listitem>
+<listitem>
+<simpara><emphasis role="strong">Source</emphasis>: <emphasis>The entity (user, system, or event) that initiates the scenario.</emphasis></simpara>
+</listitem>
+<listitem>
+<simpara><emphasis role="strong">Stimulus</emphasis>: <emphasis>The triggering event or condition the system must address.</emphasis></simpara>
+</listitem>
+<listitem>
+<simpara><emphasis role="strong">Environment</emphasis>: <emphasis>The operational context or condition under which the system experiences the stimulus.</emphasis></simpara>
+</listitem>
+<listitem>
+<simpara><emphasis role="strong">Artifact</emphasis>: <emphasis>The building-blocks or other elements of the system affected by the stimulus.</emphasis></simpara>
+</listitem>
+<listitem>
+<simpara><emphasis role="strong">Response</emphasis>: <emphasis>The outcome or behavior the system exhibits in reaction to the stimulus.</emphasis></simpara>
+</listitem>
+<listitem>
+<simpara><emphasis role="strong">Response Measure</emphasis>: <emphasis>The criteria or metric by which the system’s response is evaluated.</emphasis></simpara>
+</listitem>
+</itemizedlist>
+<important>
+<simpara>All <emphasis role="strong">NFRs</emphasis> should be linked to the quality scenarios. If a quality scenario is not linked to any NFR, it should be captured in the architecture document. <emphasis role="strong">LeanIX</emphasis> will contain all quality requirements and quality scenarios. Solution architects should ensure that all quality scenarios are captured in <emphasis role="strong">LeanIX</emphasis> and linked to the relevant NFRs and provide a link to <emphasis role="strong">LeanIX</emphasis> in this section. If any quality scenario is not captured in <emphasis role="strong">LeanIX</emphasis>, it should be captured in this section of the architecture document.</simpara>
+</important>
+<simpara><?asciidoc-pagebreak?></simpara>
+</section>
+</section>
+<section xml:id="_raid_log_and_technical_debts">
+<title>RAID Log and Technical Debts</title>
+<simpara><emphasis role="strong">Contents</emphasis></simpara>
+<simpara><emphasis>A list of identified technical risks, issues and technical debts,
+ordered by priority alongside mitigation plan for each one of them</emphasis></simpara>
+<simpara><emphasis>Arc42 says to log risks here as rest of the things (Assumptions, Issues
+and Dependencies) are project management tools.</emphasis></simpara>
+<simpara><emphasis>Assumptions and dependencies anyway should be gone
+before Gate 5 because if these are not resolved by then, they become
+risks or issues to the project.</emphasis></simpara>
+<tip>
+<simpara>We do not want to remove assumptions and dependencies but these must be linked to respective risks and issues</simpara>
+</tip>
+<simpara><emphasis role="strong">Motivation</emphasis></simpara>
+<blockquote>
+<attribution>
+Tim Lister
+<citetitle>Atlantic Systems Guild</citetitle>
+</attribution>
+<simpara>Risk management is project management for grown-ups</simpara>
+</blockquote>
+<simpara><emphasis>This should be your motto for systematic detection and evaluation of
+risks and technical debts in the architecture, which will be needed by
+management stakeholders (e.g. project managers, product owners) as part
+of the overall risk analysis and measurement planning.</emphasis></simpara>
+<simpara><emphasis role="strong">Form</emphasis></simpara>
+<simpara><emphasis>List of risks and/or technical debts, probably including suggested
+measures to minimize, mitigate or avoid risks or reduce technical debts.</emphasis></simpara>
+<informaltable frame="all" rowsep="1" colsep="1">
+<?dbhtml table-width="100%"?>
+<?dbfo table-width="100%"?>
+<?dblatex table-width="100%"?>
+<tgroup cols="5">
+<colspec colname="col_1" colwidth="42.5*"/>
+<colspec colname="col_2" colwidth="42.5*"/>
+<colspec colname="col_3" colwidth="148.75*"/>
+<colspec colname="col_4" colwidth="42.5*"/>
+<colspec colname="col_5" colwidth="148.75*"/>
+<thead>
+<row>
+<entry align="left" valign="top"><emphasis role="strong">ID</emphasis></entry>
+<entry align="left" valign="top"><emphasis role="strong">Type</emphasis></entry>
+<entry align="left" valign="top"><emphasis role="strong">Risk / Debt</emphasis></entry>
+<entry align="left" valign="top"><emphasis role="strong">Level</emphasis></entry>
+<entry align="left" valign="top"><emphasis role="strong">Mitigation</emphasis></entry>
+</row>
+</thead>
+<tbody>
+<row>
+<entry align="left" valign="top"></entry>
+<entry align="left" valign="top"></entry>
+<entry align="left" valign="top"></entry>
+<entry align="left" valign="top"></entry>
+<entry align="left" valign="top"></entry>
+</row>
+</tbody>
+</tgroup>
+</informaltable>
+<simpara><?asciidoc-pagebreak?></simpara>
+</section>
+<section xml:id="_glossary">
+<title>Glossary</title>
+<simpara><emphasis role="strong">Contents</emphasis></simpara>
+<simpara><emphasis>The most important domain and technical terms that your stakeholders use
+when discussing the system.
+You can also see the glossary as source for translations if you work in
+multi-language teams.</emphasis></simpara>
+<simpara><emphasis role="strong">Motivation</emphasis></simpara>
+<simpara><emphasis>You should clearly define your terms, so that all stakeholders</emphasis></simpara>
+<itemizedlist>
+<listitem>
+<simpara>have an identical understanding of these terms</simpara>
+</listitem>
+<listitem>
+<simpara>do not use synonyms and homonyms</simpara>
+</listitem>
+</itemizedlist>
+<simpara><emphasis role="strong">Form</emphasis></simpara>
+<simpara><emphasis>A table with columns &lt;<emphasis role="strong">Term</emphasis>&gt; and &lt;<emphasis role="strong">Definition</emphasis>&gt;.
+Potentially more columns in case you need translations.</emphasis></simpara>
+<informaltable frame="all" rowsep="1" colsep="1">
+<?dbhtml table-width="100%"?>
+<?dbfo table-width="100%"?>
+<?dblatex table-width="100%"?>
+<tgroup cols="2">
+<colspec colname="col_1" colwidth="106.25*"/>
+<colspec colname="col_2" colwidth="318.75*"/>
+<thead>
+<row>
+<entry align="left" valign="top"><emphasis role="strong">Term</emphasis></entry>
+<entry align="left" valign="top"><emphasis role="strong">Definition</emphasis></entry>
+</row>
+</thead>
+<tbody>
+<row>
+<entry align="left" valign="top"></entry>
+<entry align="left" valign="top"></entry>
+</row>
+</tbody>
+</tgroup>
+</informaltable>
+</section>
+</article>

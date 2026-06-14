@@ -22,4 +22,5 @@ Potentially more columns in case you need translations._
 [width="100%",cols="25%,75%",options="header",]
 |===
 |*Term* |*Definition*
+|       |
 |===

@@ -49,9 +49,6 @@ the generic term "quality" as the root and uses a tree-like refinement
 of the term "quality". ++[++Bass{plus}21++]++ introduced the term
 *"Quality Attribute Utility Tree"* for this purpose._
 
-
-*Royal Mail FDS - Processing Sites: Worked Example*
-
 [width="99%",cols="26%,74%",options="header",]
 |===
 |*Category (ISO 25010)* |*Quality requirement*
