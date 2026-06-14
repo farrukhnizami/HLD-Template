@@ -1,0 +1,226 @@
+== Cloud Architecture
+
+_Cloud Infrastructure section should contain cloud architecture diagram highlighting network topology, subnet, firewalls and cloud services used by the architecture. It should also provide information around high availability, regions, subscriptions, SKUs, Network Security Groups, NSG Rules, Firewalls, Cloud patterns and Cost optimization_
+
+*Availability NFR: #This needs to be considered when detailing the
+Regional/AZ placement#*
+
+[width="99%",cols="13%,77%,10%",options="header",]
+|===
+|*NFRID* |*Requirement Description* |*Status*
+|NFAV001 a|
+The FDS solution shall be available for use and supported 24 hours a
+day, 7 days a week, 365 days a year in adherence with the technical
+design principles and standards applicable to Service Criticality Level
+1.
+
+As a mission-critical system supporting the payment of Variable Pay
+Hours(over time), unplanned unavailability is not acceptable, and any
+failure must be recovered within a maximum Recovery Time Objective of 24
+hours(TBC with service).
+
+The solution may only be taken offline outside of this commitment during
+a planned maintenance window, agreed in advance with the Application
+Service Manager, who shall notify the user community prior to any
+scheduled downtime.
+
+|Approved
+|===
+
+=== Regions
+
+TIP: Capture the Azure regions used for the solution.
+
+.Azure Regions
+====
+*Example*
+
+[width="100%",cols="35%,15%,20%,10%,10%,10%",options="header",]
+|===
+|Region |Primary |Secondary 3+|Availability Zones
+| | | |AZ1 |AZ2 |AZ3
+|North Europe ^|Yes ^| ^| ^| ^|
+|West Europe ^| ^| ^| ^| ^|
+|UK South ^| ^| ^| ^| ^|
+|Germany West Central ^|Yes ^| ^|Yes ^|Yes ^|Yes
+|Sweden Central ^| ^|Yes ^|Yes ^|Yes ^|Yes
+|===
+====
+
+==== Rationale (latency, regulatory, capacity constraints)
+
+=== Availability Zones
+
+TIP: Define high availability architecture.
+
+* Services deployed across zones
+* Zone pinning requirements (if any)
+* Zonal vs zone-redundant SKUs
+
+.High Availability Architecture
+====
+*Example:*
+
+* Region supports 3 AZs
+* Workloads deployed Zone-Redundant (ZRS / AZ-aware)
+====
+
+* Region: FDS Prod and Prod Application are deployed in the Germany West
+and Sweden Central regions, each supporting 3 AZs.
+* App Service plans
+
+=== Subscriptions (Naming & Structure)
+
+TIP: Aligned to the *subscription factory model* from your HLD artefact
+
+*Details to include:*
+
+* Subscription names (fully qualified)
+* Environment split:
+** Prod
+** Pre-Prod
+** Non-Prod (Dev/Test)
+* Platform vs Workload subscriptions
+* Naming standard compliance
+
+[width="100%",cols="15%,20%,40%,25%",options="header",]
+|===
+^|*Env* ^|*Subscription Name* ^|*Subscription ID* ^|*Type*
+|===
+
+https://andotce.royalmailgroup.com/spaces/RDH/pages/454309842/IA-TS24+Cloud+Resource+Naming+Standard[*Standards*]
+
+
+=== SKU’S Used (Per Region)
+
+TIP: Define all critical service SKUs per region.
+
+*Details to include:*
+
+* Compute SKUs (VM sizes / VMSS)
+* Storage SKUs (Standard / Premium / ZRS)
+* PaaS SKUs (if applicable)
+
+.SKU Example
+====
+*Example:*
+
+[width="100%",cols="24%,26%,25%,25%",options="header",]
+|===
+|*ENVIRONMENT* |*COMPONENT* |*REGION* |*SKU*
+|NPD |ExpressRoute GW |UK South |ErGw3AZ
+|PPD |Firewall |UK South |Premium
+|PRD |VM |UK South |D4s v5
+|===
+====
+
+=== Network Security Group (NSG) Rules
+
+TIP: Already aligned to your HLD approach, where NSGs control *spoke traffic*
+
+*Details to capture:*
+
+* Source → Destination
+* Port / Protocol
+* Action (Allow/Deny)
+* Priority
+* Purpose
+
+
+.NSG Rules
+====
+*Example table:*
+
+[width="88%",cols="28%,16%,20%,8%,11%,17%",options="header",]
+|===
+|*RULE NAME* |*SOURCE* |*DESTINATION* |*PORT* |*ACTION* |*PURPOSE*
+|Allow-App-To-DB |App Subnet |DB Subnet |1433 |Allow |SQL access
+|Allow-App-To-Blob |App Subnet |Storage Subnet |443 |Allow |Blob Access
+|===
+====
+
+
+IMPORTANT: If traffic stays *inside the VNet* → *NSG rules must be defined*
+
+IMPORTANT: If traffic leaves the VNet → *NSGs are not the primary control* (handled via hub firewall(s))
+
+[width="92%",cols="39%,21%,40%",options="header",]
+|===
+|*TRAFFIC TYPE* |*NSG REQUIRED* |*NOTE*
+|Subnet → Subnet (same VNet) |✅ Yes |Primary control
+|VNet → External / Internet |❌ No |Controlled by firewall/routing
+|VNet → Other VNet |❌ No |Controlled via peering {plus} firewall
+|===
+
+=== Network / Subnet Design
+
+IMPORTANT: Critical for addressing your “network/subnet size”.
+
+*Details to include:*
+
+* VNET address space
+* Subnet segmentation
+* CIDR sizing
+* Reserved IP strategy
+* Growth headroom
+
+.Network / Subnet
+====
+*Example:*
+
+[width="45%",cols="56%,16%,28%",options="header",]
+|===
+|*SUBNET* |*CIDR* |*PURPOSE*
+|AzureFirewallSubnet |/26 |Firewall
+|AppSubnet |/24 |App tier
+|DBSubnet |/24 |Database
+|===
+====
+
+
+=== Patterns / Blueprints / Catalogue of Whitelisted Azure Products/Services
+
+Pattern Consumption Table
+
+IMPORTANT: The architect MUST confirm coverage across all domains:
+
+[width="57%",cols="27%,57%,16%",options="header",]
+|===
+|*DOMAIN* |*PATTERN IDENTIFIED (Y/N)* |*NOTES*
+|*Networking* | |
+|*Security* | |
+|*Compute* | |
+|*Data* | |
+|*Integration* | |
+|===
+
+https://andotce.royalmailgroup.com/pages/viewpage.action?pageId=504201390&spaceKey=HCI&title=Whitelisted%2BAzure%2BResource%2BTypes%2BStatus%2B-%2BSLZ[*Catalogue*]
+
+=== Cost Optimisation and FinOps Alignment*
+
+* Use of reserved capacity (where applicable)
+* Right-sizing of compute resources
+* Use of PaaS over IaaS where appropriate
+* Separation of environments for cost control
+* Costs MUST be derived from the Azure Calculator
+* DR costs MUST be included where applicable
+
+*Cost Breakdown Table*
+
+.Cost Breakdown
+====
+*Example:*
+
+[width="100%",cols="19%,13%,15%,11%,18%,24%",options="header",]
+|===
+|*COMPONENT* |*SERVICE* |*SKU* |*REGION* |*EST. MONTHLY COST (£)*
+|*JUSTIFICATION*
+|*Compute* |*VMSS* |*D4s v5* |*UK South* | |*Supports app tier scaling*
+
+|*Security* |*Azure Firewall* |*Premium* |*UK South* | |*Required for
+central control*
+
+|*Data* |*Azure SQL* |*Business Critical* |*UK South* | |
+|===
+
+====

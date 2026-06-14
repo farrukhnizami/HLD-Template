@@ -1,0 +1,56 @@
+== Architecture Decisions
+
+*Contents*
+
+_Important, expensive, large scale or risky architecture decisions
+including rationales. With "decisions" we mean selecting one alternative
+based on given criteria._
+
+_Please use your judgement to decide whether an architectural decision
+should be documented here in this central section or whether you better
+document it locally (e.g. within the white box template of one building
+block)._
+
+_Avoid redundancy. [.red]#Refer to section 4#, where you already captured the
+most important decisions of your architecture._
+
+IMPORTANT: Only capture those decisions that deviates from well established patterns and practices. We also need to capture decisions where better option was available but we had to stick with approved pattern.
+
+*Motivation*
+
+_Stakeholders of your system should be able to comprehend and retrace
+your decisions._
+
+*Form*
+
+_Various options:_
+
+* ADR
+https://cognitect.com/blog/2011/11/15/documenting-architecture-decisions[Documenting
+Architecture Decisions] for every important decision
+* List or table, ordered by importance and consequences or:
+* more detailed in form of separate sections per decision
+
+
+
+=== ADR-001 - Title of the decision
+
+[width="100%",cols="24%,76%",options="header",]
+|===
+|*Aspect* |*Detail*
+|Status |Accepted/Rejected/Proposed
+|Context |
+|Decision |
+|Consequences |
+|===
+
+=== ADR-002 - Title of the decision
+
+[width="100%",cols="24%,76%",options="header",]
+|===
+|*Aspect* |*Detail*
+|Status |Accepted/Rejected/Proposed
+|Context |
+|Decision |
+|Consequences |
+|===

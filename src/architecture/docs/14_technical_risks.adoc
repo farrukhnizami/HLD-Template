@@ -1,0 +1,35 @@
+== RAID Log and Technical Debts
+
+*Contents*
+
+_A list of identified technical risks, issues and technical debts,
+ordered by priority alongside mitigation plan for each one of them_
+
+_Arc42 says to log risks here as rest of the things (Assumptions, Issues
+and Dependencies) are project management tools._
+
+_Assumptions and dependencies anyway should be gone
+before Gate 5 because if these are not resolved by then, they become
+risks or issues to the project._
+
+TIP: We do not want to remove assumptions and dependencies but these must be linked to respective risks and issues
+
+*Motivation*
+
+[quote, Tim Lister, Atlantic Systems Guild]
+Risk management is project management for grown-ups
+
+_This should be your motto for systematic detection and evaluation of
+risks and technical debts in the architecture, which will be needed by
+management stakeholders (e.g. project managers, product owners) as part
+of the overall risk analysis and measurement planning._
+
+*Form*
+
+_List of risks and/or technical debts, probably including suggested
+measures to minimize, mitigate or avoid risks or reduce technical debts._
+
+[width="100%",cols="10%,10%,35%,10%,35%",options="header",]
+|===
+|*ID* |*Type* |*Risk / Debt* |*Level* |*Mitigation*
+|===

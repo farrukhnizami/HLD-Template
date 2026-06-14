@@ -1,0 +1,136 @@
+== Quality Requirements
+
+*Content*
+
+_This section contains all relevant quality requirements._
+
+_The most important of these requirements have already been described in
+section 1.2. (quality goals), therefore they should only be referenced
+here. In this section 10 you should also capture quality requirements
+with lesser importance, which will not create high risks when they are
+not fully achieved (but might be *nice-to-have*)._
+
+*Motivation*
+
+_Since quality requirements will have a lot of influence on architectural
+decisions you should know what qualities are really important for your
+stakeholders, in a specific and measurable way._
+
+
+=== Quality Requirements Overview
+
+*Content*
+
+_An overview or summary of quality requirements._
+
+_This section should provide an overview of quality requirements at a
+category level (Like performance, scalability, interoperability,
+security etc.) and how those requirements are met by the proposed
+architecture_
+
+*Motivation*
+
+_Often we encounter dozens (or even hundreds) of detailed quality
+requirements. In this overview section you should try to summarize, e.g.
+by describing categories or topics (as suggested by
+https://www.iso.org/obp/ui/#iso:std:iso-iec:25010:ed-2:v1:en[ISO
+25010:2023] or https://quality.arc42.org[Q42])_
+
+_If these summary descriptions are already precise, specific enough and
+measurable, you may skip section 10.2._
+
+*Form*
+
+_Use a simple table in which each line contains a category or topic and a
+short description of the quality requirement. Alternatively, you may use
+a mind map to structure these quality requirements. In literature, the
+idea of a *quality attribute tree* has also been described, which puts
+the generic term "quality" as the root and uses a tree-like refinement
+of the term "quality". ++[++Bass{plus}21++]++ introduced the term
+*"Quality Attribute Utility Tree"* for this purpose._
+
+
+*Royal Mail FDS - Processing Sites: Worked Example*
+
+[width="99%",cols="26%,74%",options="header",]
+|===
+|*Category (ISO 25010)* |*Quality requirement*
+|Functional Suitability |
+|Performance Efficiency |
+|Compatibility |
+|Usability |
+|Reliability |
+|Security |
+|Maintainability |
+|Portability    |
+|===
+
+=== Quality Scenarios (selected)
+
+*Content*
+
+_Quality scenarios make quality requirements concrete and allow to decide
+whether they are fulfilled (in the sense of acceptance criteria). Ensure
+that your scenarios are specific and measurable._
+
+_This section is complementary to NFRs defined in LeanIX. This provides
+an acceptance criteria for each NFR that could be tested. The
+distinction between an NFR and Quality Scenarios could be understood
+with the following examples:_
+
+====
+[blue]*NFR* – All PII data should be encrypted at rest
+
+[green]*Quality Scenario* – All PII data should be encrypted using AES256 before
+storing in the database.
+
+In the above example – Just by looking at the NFR alone, we cannot test
+it but the associated quality scenario makes it testable
+
+[blue]*NFR* – All save operations should be complete in less than 5 seconds
+
+[green]*Quality Scenario* – Upon clicking on Save button on employee edit screen,
+record should be saved within 3 seconds and success message should be
+displayed on the screen.
+====
+
+_Key point here is [red]*“measurable”*. We can link either LeanIX or any other
+form of document(s) where these quality scenarios are captured._
+
+_Two kinds of scenarios are especially useful:_
+
+* *Usage scenarios* _(also called application scenarios or use case
+scenarios) describe the system’s runtime reaction to a certain stimulus.
+This also includes scenarios that describe the system’s efficiency or
+performance. Example: The system reacts to a user’s request within one
+second._
+* *Change scenarios* _describe the desired effect of a modification or
+extension of the system or of its immediate environment. Example:
+Additional functionality is implemented or requirements for a quality
+attribute change, and the effort or duration of the change is measured._
+
+*Form*
+
+_Typical information for detailed scenarios include the following:_
+
+_In short form (favoured in the Q42 model):_
+
+* *Context/Background*: _What kind of system or component, what is the
+envirionment or situation?_
+* *Source/Stimulus*: _Who or what initiates or triggers a *behaviour*, *reaction* or *action*._
+* *Metric/Acceptance Criteria*: _A response including a *measure* or *metric*._
+
+_The long form of scenarios (favoured by the SEI and
+++[++Bass{plus}21++]++) is more detailed and includes the following
+information:_
+
+* *Scenario ID*: _A unique identifier for the scenario._
+* *Scenario Name*: _A short, descriptive name for the scenario._
+* *Source*: _The entity (user, system, or event) that initiates the scenario._
+* *Stimulus*: _The triggering event or condition the system must address._
+* *Environment*: _The operational context or condition under which the system experiences the stimulus._
+* *Artifact*: _The building-blocks or other elements of the system affected by the stimulus._
+* *Response*: _The outcome or behavior the system exhibits in reaction to the stimulus._
+* *Response Measure*: _The criteria or metric by which the system’s response is evaluated._
+
+IMPORTANT: All *NFRs* should be linked to the quality scenarios. If a quality scenario is not linked to any NFR, it should be captured in the architecture document. *LeanIX* will contain all quality requirements and quality scenarios. Solution architects should ensure that all quality scenarios are captured in *LeanIX* and linked to the relevant NFRs and provide a link to *LeanIX* in this section. If any quality scenario is not captured in *LeanIX*, it should be captured in this section of the architecture document.

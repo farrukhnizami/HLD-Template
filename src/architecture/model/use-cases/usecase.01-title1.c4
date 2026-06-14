@@ -1,0 +1,83 @@
+views 'Use Cases' {
+  dynamic view use-case-approve-overtime {
+    title 'Usecase 01: Approving overtime shifts'
+    description 'This usecase describes the Process of approving an overtime shift'
+
+    COM -> FDS.frontend.timesheet 'Opens timesheet to view all overtime and scheduled attendance shifts' {
+        notes '''
+        Managers _interacts_ with timesheet screen to view and adjust overtime and scheduled attendance shift duration, approve or reject those shifts
+        '''
+    }
+
+    FDS.frontend.timesheet -> FDS.backend.timesheet 'Fetch all overtime and scheduled attendance shifts from backend' {
+
+    }
+
+    FDS.backend.timesheet -> FDS.apis.timesheetservice 'Fetch shifts by consuming backend REST API' {
+
+    }
+
+    FDS.apis.timesheetservice -> FDS.databases.FDSDB 'Queries the FDS database to pull all unapproved shifts' {
+
+    }
+
+    COM -> FDS.frontend.timesheet 'Approves overtime and scheduled attendance' {
+        notes '''
+        Managers _interacts_ with timesheet screen to view and adjust overtime and scheduled attendance shift duration, approve or reject those shifts
+        '''
+    }
+
+    FDS.frontend.timesheet -> FDS.backend.timesheet 'Sends approved overtime and scheduled attendance shifts to backend' {
+
+    }
+
+    FDS.backend.timesheet -> FDS.apis.timesheetservice 'Calls backend REST API to post approved overtime and scheduled attendance shifts' {
+      technology 'POST /timesheet/approve'
+    }
+
+    FDS.apis.timesheetservice -> BIG.MQ 'Publishes approved shifts to message queue' {
+      technology 'POST /timesheet/submit'
+      notes '''
+      The approved shifts are published to a message queue (IBM MQ) to trigger the next steps in the process, such as updating the status of approved shifts in the FDS database and notifying other systems about the approved shifts.
+      '''
+    }
+
+    parallel {
+      BIG.MQ -> PSP 'Consumes approved shifts from message queue' {
+        technology 'IBM MQ subscription'
+      }
+      BIG.MQ -> DataPlatform 'Consumes approved shifts from message queue for reporting and analytics purposes' {
+        technology 'IBM MQ subscription'
+      }  
+    }
+    
+    DataPlatform -> Reporting 'Sends data to reporting platform for generating reports and analytics on approved shifts' {
+      technology 'Qlik Sense'
+    }
+
+    PSP -> BIG.MQ 'Sends acknowledgment back to message queue' {
+
+    }
+
+    BIG.MQ -> FDS.dataimport 'Triggers data import process to update the status of approved shifts in FDS database' {
+
+    }
+
+    FDS.dataimport -> FDS.databases.StagingDB -> FDS.databases.FDSDB 'Updates the status of approved shifts in FDS database' {
+      technology 'Microssoft SSIS package'
+    }
+
+    FDS.databases.FDSDB -> FDS.apis.timesheetservice 'Notifies about updated shift statuses' {
+      technology 'Microsoft SQL Sever'
+    }
+
+    FDS.apis.timesheetservice -> FDS.backend.timesheet 'Updates shift statuses in backend' {
+        technology 'GET /timesheet/updateStatus'
+    }
+
+    FDS.backend.timesheet -> FDS.frontend.timesheet 'Displays updated shift statuses to managers' {
+        technology 'Microsoft .NET'
+    }
+    include FDS, BIG, PSP, DataPlatform, Reporting
+  }
+}

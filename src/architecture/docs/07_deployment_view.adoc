@@ -1,0 +1,110 @@
+== Deployment View
+
+*Content*
+
+_The deployment view describes:_
+
+. technical infrastructure used to execute your system, with
+infrastructure elements like geographical locations, environments,
+computers, processors, channels and net topologies as well as other
+infrastructure elements and
+. mapping of (software) building blocks to that infrastructure elements.
+
+_Often systems are executed in different environments, e.g. development
+environment, test environment, production environment. In such cases you
+should document all relevant environments._
+
+_Especially document a deployment view if your software is executed as
+distributed system with more than one computer, processor, server or
+container or when you design and construct your own hardware processors
+and chips._
+
+_From a software perspective it is sufficient to capture only those
+elements of an infrastructure that are needed to show a deployment of
+your building blocks. Hardware architects can go beyond that and
+describe an infrastructure to any level of detail they need to capture._
+
+IMPORTANT: This section is split into two: [red]*Deployment View (This Section)* and [red]*Cloud Architecture (Section 8)*
+
+*Motivation*
+
+_Software does not run without hardware. This underlying infrastructure
+can and will influence a system and/or some cross-cutting concepts.
+Therefore, there is a need to know the infrastructure._
+
+*Form*
+
+_This section and section 8 should contain Deployment and Integration diagrams. We
+need to provide Azure deployment diagrams for applications deployed in
+Azure cloud mapping individual components to Azure services and network
+topologies. It should also highlight Azure regions, Availability Zones
+for both Prod and DR (Pre-Prod)_
+
+*Further Information*
+
+_See_ https://docs.arc42.org/section-7/[Deployment View] _in the arc42 documentation._
+
+=== Deployment Diagram
+
+=== System Landscape Diagram
+
+=== Infrastructure Architecture
+
+==== Environments
+
+[width="100%",cols="20%,34%,46%",options="header",]
+|===
+|*Environment* |*Purpose* |*Notes*
+|===
+
+==== Application Components to Infrastructure Components Mapping
+
+*Mapping of building blocks to infrastructure (production):*
+
+[width="100%",cols="24%,32%,44%",options="header",]
+|===
+|*Tier* |*Components* |*Building blocks hosted*
+|===
+
+==== Quality and performance features:
+
+==== Target Infrastructure Architecture
+
+===== Platforms Summary
+
+===== Load Balancers
+
+===== IT Infrastructure Landscape View
+
+===== Physical Compute
+
+===== Databases
+
+===== High Available Cluster
+
+===== Network Attached Storage (NAS)
+
+===== Network
+
+===== Local Traffic Manager (LTM)
+===== Global Traffic Manager (GTM)
+
+===== Firewall Rules (North-South / East-West)
+
+*Details to include:*
+
+* DNAT / SNAT rules
+* Application rules (FQDN-based)
+* Network rules (IP-based)
+* Inbound vs outbound distinction
+
+.Firewall Rules
+
+[width="61%",cols="25%,23%,23%,12%,17%",options="header",]
+|===
+|*RULE TYPE* |*FROM* |*TO* |*PORT* |*ACTION*
+|DNAT |Internet |Web Tier |443 |Allow
+|Network |App Subnet |External API |443 |Allow
+|===
+
+

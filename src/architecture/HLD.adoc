@@ -1,0 +1,107 @@
+
+= High-Level Design - Front Line Demand & Supply (FDS)
+
+:imagesdir: images
+image::royalmaillogo.png[Royal Mail Logo,width=166,height=128,align="center"]
+
+[.text-center]
+*Royal Mail Group*
+
+[.text-center]
+*_Processing Sites Implementation_*
+
+[.text-center]
+_Based on the arc42 Template, v9.0_
+
+_A worked-example reference document for Solution Architects across Royal Mail_
+
+
+:doctype: book
+
+[width="100%",cols="35%,65%",options="header",]
+|===
+|*Field* |*Value*
+|Document Title |FDS Processing Sites - High-Level Design
+|Version |1.0
+|Status |Draft for Review
+|Author a|
+Rashu Khanna (Solution Architect)
+
+Farrukh Nizami (Lead Solution Architect)
+
+|Document Owner |ART Programme
+|Classification |Template for Internal Use
+|Source Requirements |Processing - High Level Requirements (MDS++_++MVP)
+|Template |arc42 v9.0-EN
+|===
+
+:toc: left
+:toclevels: 3
+:sectnums: |,all|
+:sectnumlevels: 5
+:icons: font
+
+// numbering from here on
+:numbered:
+
+<<<<
+// 1. Introduction and Goals
+include::docs/01_introduction_and_goals.adoc[]
+
+<<<<
+// 2. Architecture Constraints
+include::docs/02_architecture_constraints.adoc[]
+
+<<<<
+// 3. Context and Scope
+include::docs/03_context_and_scope.adoc[]
+
+<<<<
+// 4. Solution Strategy
+include::docs/04_solution_strategy.adoc[]
+
+<<<<
+// 5. Building Block View
+include::docs/05_building_block_view.adoc[]
+
+<<<<
+// 6. Runtime View
+include::docs/06_runtime_view.adoc[]
+
+<<<<
+// 7. Deployment View
+include::docs/07_deployment_view.adoc[]
+
+<<<<
+// 8. Cloud Architecture
+include::docs/08_cloud_infrastructure.adoc[]
+
+<<<<
+// 9. Security Architecture
+include::docs/09_security_architecture.adoc[]
+
+<<<<
+// 10. Data Architecture
+include::docs/10_data_architecture.adoc[]
+
+<<<<
+// 11. Cross Cutting Concepts
+include::docs/11_cross_cutting_concepts.adoc[]
+
+<<<<
+// 12. Architecture Decisions
+include::docs/12_architecture_decisions.adoc[]
+
+<<<<
+// 13. Quality Requirements
+include::docs/13_quality_requirements.adoc[]
+
+<<<<
+// 14. Technical Risks
+include::docs/14_technical_risks.adoc[]
+
+<<<<
+// 12. Glossary
+include::docs/15_glossary.adoc[]
+
+

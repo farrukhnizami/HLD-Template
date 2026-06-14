@@ -1,0 +1,50 @@
+== Runtime View
+
+*Contents*
+
+_The runtime view describes concrete behavior and interactions of the
+system’s building blocks in form of scenarios from the following areas:_
+
+* important use cases or features: how do building blocks execute them?
+* interactions at critical external interfaces: how do building blocks
+cooperate with users and neighboring systems?
+* operation and administration: launch, start-up, stop
+* error and exception scenarios
+
+TIP: The main criterion for the choice of possible scenarios
+(sequences, workflows) is their *architectural relevance*. It is *not*
+important to describe a large number of scenarios. You should rather
+document a representative selection.
+
+*Motivation*
+
+_You should understand how (instances of) building blocks of your system
+perform their job and communicate at runtime. You will mainly capture
+scenarios in your documentation to communicate your architecture to
+stakeholders that are less willing or able to read and understand the
+static models (building block view, deployment view)._
+
+*Form*
+
+_Following diagrams could be part of this section:_
+
+* *System Landscape Diagram (C4 Model)*
+
+* *Activity Diagrams and Sequence Diagrams for some of the key Use Cases*
+
+*Further Information*
+
+_See_ https://docs.arc42.org/section-6/[Runtime View] _in the arc42
+documentation._
+
+=== Use Case 01
+
+==== Activity Diagram – Use Case 01 
+
+==== Sequence Diagram – Use Case 01
+
+=== Use Case 02
+
+==== Activity Diagram – Use Case 02 
+
+==== Sequence Diagram – Use Case 02

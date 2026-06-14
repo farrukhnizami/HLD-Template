@@ -1,0 +1,25 @@
+== Glossary
+
+*Contents*
+
+_The most important domain and technical terms that your stakeholders use
+when discussing the system.
+You can also see the glossary as source for translations if you work in
+multi-language teams._
+
+*Motivation*
+
+_You should clearly define your terms, so that all stakeholders_
+
+* have an identical understanding of these terms
+* do not use synonyms and homonyms
+
+*Form*
+
+_A table with columns ++<++*Term*++>++ and ++<++*Definition*++>++.
+Potentially more columns in case you need translations._
+
+[width="100%",cols="25%,75%",options="header",]
+|===
+|*Term* |*Definition*
+|===

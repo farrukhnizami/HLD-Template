@@ -1,0 +1,91 @@
+specification {
+  // Define whatever you want
+  element actor {
+    notation "Person, Users"
+    style {
+      shape person
+      color green
+    }
+  }
+
+  element system {
+    notation "Software Systems"
+    style {
+      opacity 20%
+    }
+  }
+
+  element external-system {
+    notation "External Software System"
+    style {
+      opacity 20%
+      color muted
+    }
+  }
+
+  element platform {
+    notation "RMG Platforms"
+    style {
+      opacity 80%
+      color muted
+    }
+  }
+
+  element webapp {
+    notation "Web Application"
+    style {
+      shape browser
+    }
+  }
+
+  element application
+  
+  element container {
+    notation 'C4 Containers'
+    style {
+      shape rectangle
+      color primary
+      opacity 50%
+    }
+  }
+
+  element component {
+    notation 'C4 Components'
+    style {
+      shape component
+    }
+  }
+
+  element queue {
+    notation 'Message Queue'
+    style {
+      shape queue
+    }
+  }
+
+  element restapi {
+    notation 'ReSTful APIs, Microservices'
+    style {
+      shape component
+    }
+  }
+  
+  element database {
+    notation "Relational Databases"
+    technology "SQL Server"
+
+    style {
+      color amber
+      shape storage
+      icon tech:microsoft-sql-server
+      opacity 30%
+    }
+  }
+
+  element fileshare {
+    notation 'File Share'
+    style {
+      shape bucket
+    }
+  }
+}

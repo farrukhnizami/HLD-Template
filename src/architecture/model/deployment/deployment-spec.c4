@@ -1,0 +1,122 @@
+specification {
+  deploymentNode internet {
+    title 'Internet'
+  }
+  
+  deploymentNode region {
+    notation 'Azure Region'
+    style {
+      opacity 0%
+    }
+  }
+
+  deploymentNode zone {
+    notation 'Azure AZ'
+    style {
+      opacity 0%
+    }
+  } 
+
+  deploymentNode environment {
+    notation 'Deployment Environment'
+    style {
+      opacity 0%
+    }
+  }
+
+  deploymentNode sqldatabase {
+    notation 'Deployment Environment'
+    style {
+      icon azure:sql-managed-instance
+      opacity 0%
+    }
+  }
+
+  deploymentNode vm {
+    notation 'Virtual Machine'
+    style {
+      icon azure:virtual-machine
+      opacity 5%
+    }
+  }
+
+  deploymentNode appservices {
+    notation 'App Service'
+    style {
+      icon azure:app-services
+      opacity 5%
+    }
+  }
+
+  deploymentNode subnet {
+    notation 'Subnet'
+    style {
+      icon azure:subnet
+      opacity 0%
+    }
+  }
+
+  deploymentNode firewall {
+    notation 'Firewall'
+    style {
+      icon azure:firewalls
+      opacity 0%
+    }
+  }
+
+  deploymentNode gateway {
+    notation 'Application Gateways'
+    style {
+      icon azure:application-gateways
+      opacity 0%
+    }
+  }
+
+  deploymentNode dns {
+    notation 'DNS Zones'
+    style {
+      icon azure:dns-zones
+      opacity 0%
+    }
+  }
+
+  deploymentNode azureservices {
+    notation 'Azure Services'
+    style {
+      icon azure:service-providers
+      opacity 50%
+    }
+  } 
+
+  deploymentNode redis {
+    notation 'Redis Cache'
+    style {
+      icon azure:cache-redis
+      opacity 50%
+    }
+  }
+
+  deploymentNode keyvault {
+    notation 'Key Vault'
+    style {
+      icon azure:key-vaults
+      opacity 50%
+    }
+  }
+
+  deploymentNode storage {
+    notation 'Storage'
+    style {
+      icon azure:storage-accounts
+      opacity 50%
+    }
+  }
+
+  deploymentNode database {
+    notation 'Database'
+    style {
+      icon azure:sql-database
+      opacity 50%
+    }
+  }
+}

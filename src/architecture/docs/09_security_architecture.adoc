@@ -1,0 +1,177 @@
+== Security Architecture
+
+*Content*
+
+_Software security architecture is the foundational design of a system that embeds defenses directly into the code and infrastructure, ensuring resistance against malicious attacks. It is a critical necessity to proactively mitigate vulnerabilities, prevent catastrophic data breaches, and maintain customer trust_
+
+_A robust software security architecture is essential for several key reasons:_
+
+* *Proactive Vulnerability Mitigation*: _By designing security into the software development life cycle (SDLC) from the ground up, you can prevent up to 80% of security problems before the code is even written. It replaces reactive, "afterthought" patching with built-in resilience._
+* *Minimizing Breach Impact*: _A solid architecture ensures that if a component is breached, the damage is isolated. Principles like "least privilege" and strict access controls prevent an attacker from escalating their access across the entire system._
+* *Protecting Critical Assets*: _It establishes standardized encryption, authentication, and authorization checkpoints to safeguard sensitive user data, intellectual property, and financial systems._
+* *Ensuring Compliance*: _For highly regulated industries like finance, healthcare, and e-commerce, a structured architectural framework is required to meet strict legal regulations and data protection laws_
+
+_It should contain the following:_
+
+. Cyber Architecture ARB Survey
+. Data Flow Diagram with STRIDE Threat Model and Mitigation
+. Identity & Access Management (IAM)
+. Data Categorization
+. Usage of AI ([.green]#If Applicable#)
+. Security RAID Log
+. Application Business Criticality Rating
+. Quantum Cryptography Secure [.red]#(TBC)#
+. Active Directory Tier Level [.red]#(TBC)#
+. Privileged Access Requirements (CyberArk)
+. User Provisioning Requirement (SailPoint)
+. Key Management Services Requirements
+
+*Motivation*
+
+_The primary rationale for software security architecture is to proactively embed protective measures into a system, rather than treating them as an afterthought. It acts as a foundational blueprint that minimizes the attack surface, prevents costly architectural reworks, and ensures business-wide compliance._
+
+_The fundamental drivers and objectives of this architecture include:_
+
+. *The Secure by Design Imperative*
+.. *Shift-Left Approach*: _Embedding security during the initial planning and design phases is exponentially more cost-effective than remediating vulnerabilities found in production._
+.. *Complexity Management*: _Modern software relies heavily on distributed systems and APIs. Security architecture provides consistent, unified controls rather than fragmented, bolt-on solutions that leave systems fragile._
+. *Core Protection Objectives (CIA Triad)*
+.. *Confidentiality*: _Ensures that sensitive data is protected from unauthorized access, leveraging end-to-end encryption and robust identity access management (IAM)._
+.. *Integrity*: _Maintains the accuracy and trustworthiness of data by implementing strict authorization protocols and data classification policies._
+.. *Availability*: _Ensures services and data remain accessible, even amidst malicious disruptions or unintended software failures_
+. *Structural Capabilities*
+.. *Segregation & Segmentation*: _Hybrid and cloud environments require independent building blocks so that a compromise in one service does not cascade through the entire organization._
+.. *Zero-Trust Frameworks*: _Assumes no user or service is trusted by default. Architecture mandates continuous validation, authentication, and authorization._
+. *Business Enablement and Risk Management*
+.. *Compliance*: _Aligns system designs with data privacy and cybersecurity laws, such as GDPR and other industry frameworks._
+.. *Cost Reduction*: _Minimizes long-term expenses by preventing security breaches, reducing expensive downtime, and streamlining incident response._
+
+*Form*
+
+_Security Architecture can be documented through diagrams, text and tables. This section should contain at least a Level-1 DFD along with a STRIDE Threat Model with clearly defined threat boundaries. RAID Logs should be in tabular format._
+
+=== Cyber Architecture Standards and NFRs
+
+.Details
+[width=60%,options="header"]
+|===
+|*Title*    |*Response*
+|All Royal Mail Cyber Architecture Standards can be found here: +
+https://intranet.royalmailgroup.com/sites/ThinkSecure/ThinkCyber/SitePages/Welcome.aspx[Architecture Standards] +
+Please confirm that you have reviewed these standards before completing the survey. |Yes/No
+|TDA Submission Name    |
+|TDA Approval Date Required |
+|Cyber Advisor Name (A Cyber Advisor is required for every project going through TDA)   |
+|Does this TDA submission introduce any AI? Please detail the requirement.  |
+|Data Privacy Impact Assessment Reference Number (if required)  |
+|===
+
+.Cyber Architecture Standards Attestation
+[width=100%,cols="40%,10%,50%"",options="header"]
+|===
+|*Survey Question*    |*Response* [.red]#*(Yes/No/NA)*#          |*Rationale* [.red]#*(If No or NA)*#
+|TDA Q1 - Does the solution make use of cloud-based services and ensure that they are appropriately secured and managed inline with ISS-001 - Cloud Computing Security Standard?    |       |
+|TDA Q2 - Does the solution transfer and store data, if so have you established and documented a minimum acceptable level of cryptographic algorithms and protocols for transmission and storage of Royal Mail data inline with ISS-002 - Cryptography Standard?    |       |
+|TDA Q3 - Has the solution been designed with the key objectives of protection of data and disaster recovery/business continuity with the ability to recover systems and recent live data in the event of a partial or total loss of a service aligned to ISS-003 - Data Backup and Restoration Standard?   |       |
+|TDA Q4 -Does the solution ensure that RM assets are appropriately managed and protected from information security breaches inline with ISS-004 - Asset Management Standard?(An Information Asset is a definable piece of information, stored or processed in any manner which is recognized as valuable to the Royal Mail Group. A system that processes that information is also an asset.)   |       |
+|TDA Q5 - Does the solution required and meet the classifying of information assets as stated in ISS-005 - Information Classification Standard?     |       |
+|TDA Q6 - Has the solution/design assigned Data/System Impact Levels as stated in ISS-005 - Information Classification Standard?    |       |
+|TDA Q7 - Does the solution/design require and ensure that data is labelled accordingly as stated in ISS-005 - Information Classification Standard?     |       |
+|TDA Q 8 - Has the solution or design identified, assessed and provided a treatment plan and monitoring of any Tech and Cyber risk as detailed in ISS-007 - Risk Management Standard?   |       |
+|TDA Q9 - Has the solution implemented the identified requirements for the provisioning, secure usage, and management of company-provided mobile devices, specifically tablets and smartphones, through the use of Mobile Device Management (MDM) software aligned to ISS-008 - Mobile Security Standard?   |       |
+|TDA Q10 - Has the solution met the requirements to protect RMG data specifically confidential or strictly confidential data accessed or stored on mobile devices as outlined in ISS-008 - Mobile Security Standard?    |       |
+|TDA Q11 - Does the solution implement computer network solutions in accordance with the "Information Security requirements" specified in ISS-009 - Network Security Standard?      |       |
+|TDA Q12 - Has the project understood the procedures necessary to identify, assess, prioritise, and remediate vulnerabilities affecting Royal Mail Group (RMG) following the ISS-010 - Vulnerability Management Standard?(Including but not limited to operating systems, applications, cloud resources, web technologies, server, desktop, mobile device software, hardware, network devices and common coding vulnerabilities in software-development processes)      |       |
+|TDA Q13 - Has the solution/project reviewed and aligned to the security requirements for developing and using web services, whether in designing a solution, implementing a system or operating a system based on web services in line with ISS-011 - Web Services Security Standard   |       |
+|TDA Q14 - Does the solution or design implement endpoint solutions in accordance with requirements from Information Security and others; to describe system functionality and parameters necessary to fulfil security requirements; and to define key support processes as specified in ISS-012 - Endpoint Security Standard?      |       |
+|TDA Q15 - Does the solution or design meet the minimum standard to allow Royal Mail Group (RMG) to address Authentication related risks through the implementation of controls as specified in ISS-013 - Authentication Standard?      |       |
+|TDA Q16 - Does the solution need to authenticate non-RMG users and is this inline with ISS-013 - Authentication Standard?      |       |
+|TDA Q17 - Does the solution need to authenticate users from an RMG-managed user directory and does this follow the requirements in ISS-013 - Authentication Standard?      |       |
+|TDA Q18 - Does the proposed design/solution meet the security requirements to ensure that software development by/on behalf of Royal Mail Group (RMG) minimizes and prevents the risk/impact of information security following ISS-014 - Secure Product Development Standard       |       |
+|TDA Q19 - Does the design/solution follow the defined set of requirements for security testing providing confirmation that all RMG systems and processes are sufficiently resilient in line with RMG risk appetite, with all controls proven effective as outlined in ISS-015 - Cyber Security Testing Standard?       |       |
+|TDA Q20 - Have all individuals working on this design/project for Royal Mail Group Ltd, including employees, workers, self-employed contractors, consultants, and agency workers (referred to as “our people”) completed the required cybersecurity training and awareness defined in ISS-016 - Cyber Security Training and Awareness Standard?        |       |
+|TDA Q21 - Does the design/project follow the secure practices to manage secrets and cryptographic keys following ISS-017 - Secret & Key Management Standard alongside ISS-002 - Cryptography Standard which defines the acceptable cryptographic algorithms and protocols for the secure transmission and storage of data?     |       |
+|TDA Q22 - Has the design/project determined what software needs to be installed and minimum logging level for Syslog, Common Event Format (CEF) logs and Windows events to maintain visibility across the Royal Mail’s infrastructure. Application logs are based on use case and will be assessed by the Cyber Engineering team using requirements/tools available. i:e Data connector/Logic App etc in line with ISS-020 - SIEM System Monitoring Standard?      |       |
+|TDA Q23 - Does this design/project meet the requirements for Royal Mail Group (RMG) Cyber Threat Intelligence (CTI) programme and have these been aligned to ISS-023 - Threat Intelligence Standard?       |       |
+|===
+
+.Cyber Architecture Standards-Aligned NFRs
+
+[.red]*_LeanIX Link to be provided for cyber security NFRs_*
+
+IMPORTANT: LeanIX should be used as a reference for the cyber NFRs that need to be met for the solution. The solution should meet all the requirements listed in LeanIX. Any deviations from the mandatory requirements must be documented with a formal risk acceptance, including compensating controls and an expiry date.
+
+=== Data Flow Diagram / Threat Modelling 
+
+=== STRIDE Mitigation
+
+IMPORTANT: This section should contain a *STRIDE* Threat Model with clearly defined threat boundaries and mitigation. The *STRIDE* model is a widely used framework for identifying and categorizing potential security threats in software systems. It helps architects and developers systematically analyze the system's architecture to identify vulnerabilities and design appropriate countermeasures. Cyber architects should use the *STRIDE* model to assess the security posture of the system and ensure that it meets the required security standards.They need to work with Solution architects to ensure that the *STRIDE* model is comprehensive and covers all relevant aspects of the system's architecture. The *STRIDE* model should be used in conjunction with other security best practices and standards to ensure that the system is secure and resilient against potential threats. Solution architects must ensure that the *STRIDE* model is integrated into the overall architecture and design of the system, and that it is regularly reviewed and updated as the system evolves. The *STRIDE* model should be used to inform security testing and validation activities, and to ensure that any identified vulnerabilities are addressed in a timely manner.
+
+.STRIDE Mitigation
+[width="100%",cols="20%,25%,35%, 20%",options="header",]
+|===
+|*STRIDE*                   |*Issue*    |*Mitigation*   |*Evidence*
+|*Spoofing*                   |*Spoofing: User Identity* - Attacker pretends to be a legitimate OPG/COM user to access FDS. +
+                             *Spoofing: Service Identity* - Attacker pretends to be a trusted upstream system (MQ/FTPS/JoinedUp).         |*Web Application Firewall (WAF)* - Protects FDS frontend and APIs from common web attacks +
+                             *APIM Security Policies* - Rate limiting, JWT validation, IP filtering, schema validation +
+                             *Role-Based Access Control (RBAC)* - Ensures least-privilege access for users and services +
+                             *MQ Authentication & ACLs* - Prevents spoofing and tampering on MQ channels, Service identity validation      |
+|*Tampering*                  |*Tampering: API Payloads* - Modification of duty, timesheet or attendance data in transit. +
+                             *Tampering: Import Files* - Modification of files sent via FTPS before ingestion.          
+                            |*TLS Encryption* - Encrypts API traffic +
+                             *APIM Security Policies* - Rate limiting, JWT validation, IP filtering, schema validation, Schema validation +
+                             *FTPS Hardening* - Ensures secure file transfer with MFA, IP allowlists, and checksums, Checksums & secure transfer +
+                             *Input Validation* - Prevents SQL injection and malformed payloads, Rejects malformed data         |
+|*Repudiation*                |*Repudiation: User Actions* - Users deny having approved duties or timesheets. +
+                             *Repudiation: Admin Changes* - Admins deny configuration or security‑relevant changes.          
+                            |*Audit Logging* - Captures user and admin actions for non-repudiation, Immutable logs, Admin activity logging' +
+                             *SIEM Monitoring* - Detects anomalies, DoS attempts, tampering, and suspicious activity, Alerting on suspicious actions        |
+|*Information Disclosure*     |*Information Disclosure: PII & HR Data* - Exposure of personal and HR data from FDS DB and staging. +
+                             *Information Disclosure: Integration Data* - Exposure of data in transit via MQ/FTPS/Data Platform.          
+                            |*TLS Encryption* - Encrypts data in transit +
+                             *Encryption at Rest* - Protects DB contents, Protects FDS DB, Staging DB, and exported files +
+                             *Azure Key Vault* - Protects secrets, connection strings, certificates, Protects credentials +
+                             *Role-Based Access Control (RBAC)* - Ensures least-privilege access for users and services, Restricts DB access        |
+|*Denial of Service (DoS)*    |*DoS: Frontend & APIs* - Overwhelming FDS frontend and APIs with traffic. +
+                             *DoS: Integration Channels* - Flooding MQ/FTPS to disrupt data flows.           
+                            |*Web Application Firewall (WAF)* - Protects FDS frontend and APIs from common web attacks, Blocks volumetric attacks +
+                             *APIM Security Policies* - Rate limiting +
+                             *SIEM Monitoring* - Detects MQ flooding        |
+|*Elevation of Privilege*     |*Elevation of Privilege: Application* - Exploiting application flaws to gain higher privileges. +
+                             *Elevation of Privilege: Database* - Abusing DB permissions to bypass application controls.          
+                            |*Role-Based Access Control (RBAC)* - Ensures least-privilege access for users and services, Restricts backend privileges +
+                             *Input Validation* - Prevents injection +
+                             *Azure Key Vault* - Protects DB credentials +
+                             *Encryption at Rest* - Protects DB files       |
+|===
+
+=== Identity & Access Management (IAM)
+
+_This section should explain proposed authentication and authorization mechanism. It should include Role Based Access Control (RBAC), Multi-factor Authentication (MFA) etc. with details around 3rd Party/Admin/Break Glass/Customer/User -User Access Matrix, Groups, Roles, Permissions, Access method, Secure Access Method, MFA etc._
+
+NOTE: A break glass account (or emergency access account) is a highly privileged IT account designed exclusively for emergencies. It acts as a digital failsafe to bypass standard security controls (like SSO, MFA, or Conditional Access policies) so administrators can restore system access if regular channels fail.
+
+=== Usage of AI ([.green]#If Applicable#)
+
+NOTE: This should contain Purpose of AI (Use Case), Approved use of AI, Securing the AI etc.
+
+=== Security RAID Log
+
+[width="100%",cols="10%,10%,35%,10%,35%",options="header",]
+|===
+|*ID*   |*Type*     |*Risk / Debt*  |*Level*    |*Mitigation*
+|       |           |               |           |
+|       |           |               |           |
+|===
+
+=== Application Business Criticality Rating
+
+=== Quantum Cryptography Secure [.red]#(TBC)#
+
+=== Active Directory Tier Level [.red]#(TBC)#
+
+=== Privileged Access Requirements (CyberArk)
+
+=== User Provisioning Requirement (SailPoint)
+
+=== Key Management Services Requirements
