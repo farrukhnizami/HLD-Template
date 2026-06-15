@@ -12,9 +12,14 @@ This document serves as a comprehensive **template and guide** for Solution Arch
 
 | Property | Value |
 |----------|-------|
-| Document Title | HLD - Front Line Demand & Supply (FDS) |
-| Status | Draft |
-| Classification | Template for Internal Use |
+|Document Title |
+|Version |
+|Status |
+|Author |
+|Document Owner |
+|Classification |Template for Internal Use
+|Source Requirements |
+|Template |HLD v0.1
 
 ---
 
