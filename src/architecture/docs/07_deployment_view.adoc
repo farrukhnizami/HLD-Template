@@ -68,8 +68,6 @@ _See_ https://docs.arc42.org/section-7/[Deployment View] _in the arc42 documenta
 |       |             |
 |===
 
-==== Quality and performance features:
-
 ==== Target Infrastructure Architecture
 
 ===== Platforms Summary
@@ -89,6 +87,7 @@ _See_ https://docs.arc42.org/section-7/[Deployment View] _in the arc42 documenta
 ===== Network
 
 ===== Local Traffic Manager (LTM)
+
 ===== Global Traffic Manager (GTM)
 
 ===== Firewall Rules (North-South / East-West)

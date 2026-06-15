@@ -1,7 +1,5 @@
 # High-Level Design Template
 
-**Royal Mail Group** | Processing Sites Implementation
-
 Based on the arc42 Template (v9.0) | An HLD Template for Solution Architects across Royal Mail
 
 ---
