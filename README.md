@@ -1,6 +1,6 @@
 # High-Level Design Template
 
-Based on the arc42 Template (v9.0) | An HLD Template for Solution Architects across Royal Mail
+Based on the arc42 Template (v9.0) | An HLD Template for Solution Architects
 
 ---
 
