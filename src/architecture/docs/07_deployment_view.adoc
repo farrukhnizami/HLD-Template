@@ -72,13 +72,39 @@ _See_ https://docs.arc42.org/section-7/[Deployment View] _in the arc42 documenta
 
 ===== Platforms Summary
 
+.Platform Summary
+[width="100%",cols="20%,40%,40%",options="header",]
+|===
+|*Platform* |*Purpose* |*Relevance*
+|           |          |
+|===
+
+
 ===== Load Balancers
+
+====== Local Traffic Manager (LTM)
+
+====== Global Traffic Manager (GTM)
 
 ===== IT Infrastructure Landscape View
 
-===== Physical Compute
+===== Compute (Physical / Virtual / Container)
+
+.Compute (Physical / Virtual / Container)
+[width="100%",cols="15%,15%,15%,10,10,10,10,15",options="header",]
+|===
+|*Host* |*App* |*OS* |*CPU* |*Mem* |*Disk* |*DC* |*Type*
+|       |       |       |      |      |      |      |
+|===   
 
 ===== Databases
+
+.Database Servers (Physical / Virtual)
+[width="100%",cols="15%,15%,15%,10,10,10,10,15",options="header",]
+|===
+|*Host* |*DB* |*OS* |*CPU* |*Mem* |*Disk* |*DC* |*Type*
+|       |       |       |      |      |      |
+|===   
 
 ===== High Available Cluster
 
@@ -86,9 +112,14 @@ _See_ https://docs.arc42.org/section-7/[Deployment View] _in the arc42 documenta
 
 ===== Network
 
-===== Local Traffic Manager (LTM)
+====== Network Protocols
 
-===== Global Traffic Manager (GTM)
+.Network Protocols
+[width="100%",cols="20%,40%,40%",options="header",]
+|===
+|*Protocol* |*Purpose* |*EndPoints*
+|           |          |
+|===
 
 ===== Firewall Rules (North-South / East-West)
 
