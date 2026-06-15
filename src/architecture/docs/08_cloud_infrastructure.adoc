@@ -8,23 +8,7 @@ Regional/AZ placement#*
 [width="99%",cols="13%,77%,10%",options="header",]
 |===
 |*NFRID* |*Requirement Description* |*Status*
-|NFAV001 |
-The FDS solution shall be available for use and supported 24 hours a
-day, 7 days a week, 365 days a year in adherence with the technical
-design principles and standards applicable to Service Criticality Level
-1.
-
-As a mission-critical system supporting the payment of Variable Pay
-Hours(over time), unplanned unavailability is not acceptable, and any
-failure must be recovered within a maximum Recovery Time Objective of 24
-hours(TBC with service).
-
-The solution may only be taken offline outside of this commitment during
-a planned maintenance window, agreed in advance with the Application
-Service Manager, who shall notify the user community prior to any
-scheduled downtime.
-
-|Approved
+|           |                       |
 |===
 
 === Regions

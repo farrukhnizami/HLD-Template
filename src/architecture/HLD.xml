@@ -3,8 +3,8 @@
 <?asciidoc-numbered?>
 <article xmlns="http://docbook.org/ns/docbook" xmlns:xl="http://www.w3.org/1999/xlink" version="5.0" xml:lang="en">
 <info>
-<title>High-Level Design - Front Line Demand &amp; Supply (FDS)</title>
-<date>2026-06-14</date>
+<title>High-Level Design Template</title>
+<date>2026-06-15</date>
 </info>
 <informalfigure>
 <mediaobject>
@@ -15,9 +15,7 @@
 </mediaobject>
 </informalfigure>
 <simpara role="text-center"><emphasis role="strong">Royal Mail Group</emphasis></simpara>
-<simpara role="text-center"><emphasis role="strong"><emphasis>Processing Sites Implementation</emphasis></emphasis></simpara>
 <simpara role="text-center"><emphasis>Based on the arc42 Template, v9.0</emphasis></simpara>
-<simpara><emphasis>A worked-example reference document for Solution Architects across Royal Mail</emphasis></simpara>
 <informaltable frame="all" rowsep="1" colsep="1">
 <?dbhtml table-width="100%"?>
 <?dbfo table-width="100%"?>
@@ -658,18 +656,9 @@ Regional/AZ placement</emphasis></emphasis></simpara>
 </thead>
 <tbody>
 <row>
-<entry align="left" valign="top"><simpara>NFAV001</simpara></entry>
-<entry align="left" valign="top"><simpara>The FDS solution shall be available for use and supported 24 hours a
-day, 7 days a week, 365 days a year in adherence with the technical
-design principles and standards applicable to Service Criticality Level
-1.</simpara><simpara>As a mission-critical system supporting the payment of Variable Pay
-Hours(over time), unplanned unavailability is not acceptable, and any
-failure must be recovered within a maximum Recovery Time Objective of 24
-hours(TBC with service).</simpara><simpara>The solution may only be taken offline outside of this commitment during
-a planned maintenance window, agreed in advance with the Application
-Service Manager, who shall notify the user community prior to any
-scheduled downtime.</simpara></entry>
-<entry align="left" valign="top"><simpara>Approved</simpara></entry>
+<entry align="left" valign="top"></entry>
+<entry align="left" valign="top"></entry>
+<entry align="left" valign="top"></entry>
 </row>
 </tbody>
 </tgroup>

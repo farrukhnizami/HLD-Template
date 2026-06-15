@@ -1,5 +1,5 @@
 
-= High-Level Design - Front Line Demand & Supply (FDS)
+= High-Level Design Template
 
 :imagesdir: images
 image::royalmaillogo.png[Royal Mail Logo,width=166,height=128,align="center"]
@@ -8,12 +8,7 @@ image::royalmaillogo.png[Royal Mail Logo,width=166,height=128,align="center"]
 *Royal Mail Group*
 
 [.text-center]
-*_Processing Sites Implementation_*
-
-[.text-center]
 _Based on the arc42 Template, v9.0_
-
-_A worked-example reference document for Solution Architects across Royal Mail_
 
 
 :doctype: book

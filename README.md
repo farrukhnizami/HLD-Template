@@ -1,329 +1,399 @@
-# Frontline Demand & Supply (FDS)
+# High-Level Design Template
 
-**Resource Planning and Duty Management System**
+**Royal Mail Group** | Processing Sites Implementation
 
-| | |
-|---|---|
-| **Project Managers** | Nilgul Perk, Jamie Dobson |
-| **Solution Architects** | Rashu Khanna, Kunle Olagbegi |
+Based on the arc42 Template (v9.0) | An HLD Template for Solution Architects across Royal Mail
 
 ---
 
-## Table of Contents
+## 📋 Document Overview
 
-1. [Overview](#overview)
-2. [Actors & Users](#actors--users)
-3. [System Context (C1)](#system-context-c1)
-4. [Container Architecture (C2)](#container-architecture-c2)
-5. [Backend Components (C3)](#backend-components-c3)
-6. [Integration Architecture](#integration-architecture)
-7. [Key Use Cases](#key-use-cases)
-8. [Technology Stack](#technology-stack)
-9. [Data & Storage](#data--storage)
-10. [Architecture Diagrams](#architecture-diagrams)
+This document serves as a comprehensive **template and guide** for Solution Architects at Royal Mail Group to create a High-Level Design (HLD) for the FDS system. It is structured around the **arc42 template (v9.0)** and heavily emphasizes the **C4 model** for diagrams, **cloud (Azure)** architecture, **security (Secure by Design)**, and **data architecture**.
+
+| Property | Value |
+|----------|-------|
+| Document Title | HLD - Front Line Demand & Supply (FDS) |
+| Status | Draft |
+| Classification | Template for Internal Use |
 
 ---
 
-## Overview
+## 📚 Table of Contents
 
-FDS (Frontline Demand & Supply) is an enterprise resource planning and duty management system used by frontline operations. It covers the full lifecycle of workforce duty management including:
-
-- Attendance tracking via barcode scanners (PDA / Console)
-- Attendance plan creation and modification
-- Duty revision submission and approval workflows
-- Overtime, scheduled attendance (SA), and agency shift management and approval
-- Integration with HR, payroll, fleet, and reporting platforms
-
----
-
-## Actors & Users
-
-| Actor | Role | Interactions |
-|---|---|---|
-| **OPG** | Frontline Workers | Scan in/out via PDA or Console; view approved overtime in People App |
-| **PSM / COM / PCOM / CCOM / Bookroom** | Duty Managers | Manage duties in Delivery and Processing Units via FDS Web UI |
-| **COM / PCOM / CCOM** | Attendance Plan Managers | Create/update attendance plans; approve or reject overtime, SA and agency shifts |
-| **Delivery Assurance / OPL / Finance Business Partner** | Approvers | Approve or reject duty change submissions |
+1. [Introduction and Goals](#1-introduction-and-goals)
+2. [Architecture Constraints](#2-architecture-constraints)
+3. [Context and Scope](#3-context-and-scope)
+4. [Solution Strategy](#4-solution-strategy)
+5. [Building Block View](#5-building-block-view)
+6. [Runtime View](#6-runtime-view)
+7. [Deployment View](#7-deployment-view)
+8. [Cloud Architecture](#8-cloud-architecture-azure-focused)
+9. [Security Architecture](#9-security-architecture)
+10. [Data Architecture](#10-data-architecture)
+11. [Cross-cutting Concepts](#11-cross-cutting-concepts)
+12. [Architecture Decisions](#12-architecture-decisions)
+13. [Quality Requirements](#13-quality-requirements)
+14. [RAID Log and Technical Debts](#14-raid-log-and-technical-debts)
+15. [Glossary](#15-glossary)
 
 ---
 
-## System Context (C1)
+## 1. Introduction and Goals
 
-FDS operates within a broader ecosystem of internal platforms and external systems.
+Describes the relevant requirements and driving forces that software architects and development teams must consider.
 
-### External Systems
+### 1.1 Requirements Overview
+- Short description of functional requirements in use-case format
+- Link to existing requirements documents with version numbers
+- Focus on business activity improvement and quality enhancement
 
-| System | Type | Description | Integration |
-|---|---|---|---|
-| **PSP (SAP)** | Platform | Sends absences, HR master data, and overtime shift status | IBM MQ, FTPS |
-| **JoinedUp** | External SaaS | Agency worker requisition and payments | REST API |
-| **M5 Fleet (AssetWorks)** | External System | Provides fleet data | FTPS |
-| **Winpak (Honeywell)** | External System | Provides ID card / access control data | FTPS |
-| **MDM (Teradata)** | Platform | Sends master data | FTPS |
-| **Barcode Scanner** | External System | PDA and Console devices that record employee attendance | IBM MQ |
-| **Delivery System Apps** | System Group | Legacy delivery planning tools (DDS Legacy, DDS MARS, MDS, Desktop Planning Tool) | Azure APIM |
-| **Email Provider** | External SaaS | Microsoft Exchange for sending approval notification emails | REST |
-| **Data Platform (GCP)** | Platform | Receives operational data for analytics and reporting | FTPS, IBM MQ |
-| **Reporting Platform (Qlik)** | Platform | Business intelligence and reporting dashboards | Data Platform |
-| **People App** | Mobile App | Displays approved overtime shifts to frontline workers | Azure APIM |
+### 1.2 Quality Goals
+- Top 3-5 quality goals (maximum) with highest importance to major stakeholders
+- Concrete, measurable goals - avoid buzzwords
+- Table format with quality goals and scenarios, ordered by priority
 
-### Integration Middleware — BIG
-
-**BIG** (Backbone Integration Gateway) is the central integration layer composed of:
-
-| Component | Technology | Purpose |
-|---|---|---|
-| **FTPS** | Secured FTP | File-based data exchange for HR, fleet, ID card, and master data |
-| **MQ** | IBM MQ | Event-driven messaging for attendance, absences, overtime status, and approved shifts |
-| **APIM** | Azure API Management | API gateway used by delivery system apps and People App |
+### 1.3 Stakeholders
+Table with role names, contacts, and expectations regarding architecture and documentation.
 
 ---
 
-## Container Architecture (C2)
+## 2. Architecture Constraints
 
-FDS is composed of four containers:
+Any requirement that constraints architects in design decisions, implementation decisions, or development process.
 
-```
-┌─────────────────────────────────────────────────────────┐
-│                    FDS System                           │
-│                                                         │
-│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐  │
-│  │   Frontend   │  │     APIs     │  │   Backend    │  │
-│  │  (Angular)   │  │   (.NET)     │  │   (.NET /    │  │
-│  │              │  │              │  │    SSIS)     │  │
-│  └──────┬───────┘  └──────┬───────┘  └──────┬───────┘  │
-│         │                 │                  │          │
-│         └─────────────────┴──────────────────┘          │
-│                           │                             │
-│                  ┌────────▼────────┐                    │
-│                  │   Databases     │                    │
-│                  │  (SQL Server)   │                    │
-│                  └─────────────────┘                    │
-└─────────────────────────────────────────────────────────┘
-```
+| Constraint Type | Description |
+|----------------|-------------|
+| Technical Constraints | Hardware, software, platform limitations |
+| Organisational & Political Constraints | Budget, timeline, regulatory, compliance |
+| Conventions | Programming, versioning, documentation, naming |
 
 ---
 
-### Frontend Web App
+## 3. Context and Scope
 
-**Technology:** Angular.js / TypeScript  
-**Shape:** Browser Web Application
+Delimits the system from all its communication partners (neighboring systems and users).
 
-The FDS web interface provides four functional modules:
+### 3.1 Business Context
+- C4-style System Context diagram
+- Domain-specific inputs and outputs
+- Interaction between business capabilities
 
-| Module | Description | API Dependency |
-|---|---|---|
-| **Duty Manager** | Add, delete, modify duties and submit for approval | Duty Manager Service |
-| **Approval Workflow** | View submitted duties and approve or reject duty changes | Approval Workflow Service |
-| **Attendance Plan** | Create/modify attendance plans, create overtime shifts, assign OPGs to duties | Attendance Plan Service |
-| **Timesheet Approval** | View overtime and agency shifts, approve or reject | Timesheet Backend (direct) |
-
-All frontend modules send user activity data to the **Action Log Service** for auditing.
+### 3.2 Technical Context
+- UML deployment diagram describing channels to neighboring systems
+- Mapping of domain I/O to channels (protocols, hardware)
+- Big Picture inclusion required
 
 ---
 
-### APIs Container
+## 4. Solution Strategy
 
-**Technology:** .NET REST APIs
+Short summary of fundamental decisions and solution strategies including:
 
-Seven REST API services act as the interface layer between the frontend and backend processing logic:
+- Technology decisions
+- Top-level decomposition (architectural/design patterns)
+- How to achieve key quality goals
+- Relevant organizational decisions
 
-| Service | Description | Downstream |
-|---|---|---|
-| **Email Service** | Sends notification emails using templates | Microsoft Exchange |
-| **Agency Worker Service** | Requests agency workers from JoinedUp; sends approved shifts for payment | JoinedUp |
-| **Action Log Service** | Audits all user activities | FDS DB |
-| **Duty Manager Service** | Reads/writes duty data | Backend: Duty Manager |
-| **Timesheet Service** | Reads/writes timesheet data | Backend: Timesheet Management |
-| **Attendance Plan Service** | Reads/writes attendance plan data | Backend: Attendance Plan |
-| **Approval Workflow Service** | Reads/writes approval workflow status | FDS DB |
+> **Motivation**: These decisions form the cornerstones for your architecture.
 
 ---
 
-### Backend Container
+## 5. Building Block View
 
-**Technology:** .NET (business logic), SSIS (ETL)
+Static decomposition of the system using **C4 model (C2 & C3)**:
 
-Five backend components handle core business processing:
+### 5.1 Container Diagram (C2)
+### 5.2 Component Diagram (C3) - Backend Components
 
-| Component | Technology | Description |
-|---|---|---|
-| **Data Import** | SSIS | Ingests data from FTPS and MQ into Staging DB, then validates and loads into FDS DB |
-| **Data Export** | SSIS | Exports data to Data Platform (GCP), IBM MQ (PSP payments), Agency Service, and DelSys DB |
-| **Approval Workflow** | .NET | Manages duty revision approval workflow state changes |
-| **Attendance Plan** | .NET | Reads and writes attendance plans |
-| **Timesheet Management** | .NET | Reads and writes timesheet approvals for overtime and agency shifts |
+Also includes:
+- Integration Architecture
+- Reference to ICDs (Interface Control Documents)
+- Relationships between containers, components, and external systems (internal/external to RMG)
 
 ---
 
-### Databases Container
+## 6. Runtime View
 
-**Technology:** SQL Server 2019
+Concrete behavior and interactions of building blocks for architecturally relevant scenarios:
 
-| Database | Description | Retention |
-|---|---|---|
-| **FDS SQL DB** | Main transactional database for all FDS operational data | 7 years |
-| **Staging DB** | Holds imported data as-is before validation and transformation | — |
-| **DelSys DB** | Stores delivery system data for reporting and downstream integration | — |
+- System Landscape Diagram (C4 Model)
+- Activity Diagrams
+- Sequence Diagrams
 
-**FDS SQL DB Backup Policy:**
-- Full backup: Daily, 14-day retention
-- Differential backup: Hourly, 24-hour retention
-
----
-
-## Backend Components (C3)
-
-The backend components interact as follows:
-
-```
-FTPS / MQ
-    │
-    ▼
-Data Import (SSIS)
-    ├──► Staging DB ──► FDS SQL DB
-    └──► FDS SQL DB (directly for validated data)
-
-FDS SQL DB
-    │
-    ├──► Data Export (SSIS)
-    │       ├──► Data Platform (GCP)
-    │       ├──► IBM MQ (PSP payments)
-    │       ├──► Agency Worker Service
-    │       └──► DelSys DB
-    │
-    ├──► Approval Workflow (.NET)
-    ├──► Attendance Plan (.NET)
-    └──► Timesheet Management (.NET)
-```
+**Scenarios to cover**:
+- Important use cases/features
+- Critical external interfaces
+- Operation and administration (launch, startup, stop)
+- Error and exception scenarios
 
 ---
 
-## Integration Architecture
+## 7. Deployment View
 
-FDS uses a **hybrid integration pattern** — event-driven messaging via IBM MQ combined with file-based exchange via FTPS:
+### 7.1 Deployment Diagram
+### 7.2 System Landscape Diagram
+### 7.3 Infrastructure Architecture
 
-```
-External Sources          BIG Middleware          FDS
-──────────────           ───────────────        ──────
-PSP (SAP)   ──MQ──►┐
-Barcode     ──MQ──►├──► IBM MQ ──────────────► Data Import (SSIS)
-Scanner            │
-                   │
-M5 Fleet    ──────►┐
-Winpak      ──────►├──► FTPS ───────────────► Data Import (SSIS)
-MDM         ──────►┘
+| Environment | Purpose | Notes |
+|-------------|---------|-------|
+| Development | | |
+| Test | | |
+| Production | | |
 
-FDS ──────────────────► IBM MQ ──────────────► PSP (payments)
-FDS ──────────────────► FTPS ────────────────► Data Platform (GCP)
-FDS ──────────────────► APIM ────────────────► Delivery System Apps
-FDS ──────────────────► APIM ────────────────► People App
-```
+**Infrastructure Components**:
+- Platforms, Load Balancers, Physical Compute
+- Databases, HA Cluster, NAS
+- Network, LTM, GTM
+- **Firewall Rules** (North-South / East-West) including DNAT/SNAT, FQDN-based rules, IP-based rules
 
 ---
 
-## Key Use Cases
+## 8. Cloud Architecture (Azure-focused)
 
-### UC-01: Approving Overtime Shifts
+### 8.1 Regions
+Capture Azure regions used for production and DR (Pre-Prod)
 
-1. COM Manager opens the **Timesheet Approval** screen in FDS Web UI
-2. Frontend fetches all unapproved overtime and SA shifts from **Timesheet Service API** → **FDS DB**
-3. Manager reviews and approves shifts
-4. Approved shifts are sent via `POST /timesheet/approve` to **Timesheet Service API**
-5. Timesheet Service **publishes to IBM MQ** topic `approved-shifts`
-6. IBM MQ fans out **in parallel**:
-   - **PSP (SAP)** consumes approved shifts for automated payroll processing
-   - **Data Platform (GCP)** consumes for reporting and analytics → Qlik dashboards
-7. PSP sends an acknowledgment back to MQ
-8. MQ triggers **Data Import (SSIS)** to update shift statuses in FDS DB
-9. Updated statuses flow back to the manager's Timesheet screen
+| Region | Primary | Secondary | Availability Zones |
+|--------|---------|-----------|-------------------|
+| North Europe | Yes | | AZ1, AZ2, AZ3 |
+| UK South | | Yes | |
+| Germany West Central | Yes | | Yes |
+| Sweden Central | Yes | | Yes |
 
-### UC-02: Approving Duty Revisions
+### 8.2 Availability Zones
+- Services deployed across zones
+- Zone pinning requirements
+- Zonal vs zone-redundant SKUs
 
-Duty revision submissions follow the **Approval Workflow**:
+### 8.3 Subscriptions (Naming & Structure)
+- Prod, Pre-Prod, Non-Prod (Dev/Test)
+- Platform vs Workload subscriptions
+- Naming standard compliance
 
-1. PSM/Bookroom submits a duty revision via the **Approval Workflow** UI
-2. **Delivery Assurance / OPL / Finance Business Partner** receives notification via the **Email Service** (Microsoft Exchange)
-3. Approver logs in and approves or rejects the submission via the **Approval Workflow** UI
-4. Workflow status is updated via **Approval Workflow Service** → **Approval Workflow backend** → **FDS DB**
+### 8.4 SKUs Used (Per Region)
+- Compute SKUs (VM sizes/VMSS)
+- Storage SKUs (Standard/Premium/ZRS)
+- PaaS SKUs
 
----
+### 8.5 Network Security Group (NSG) Rules
 
-## Technology Stack
+| Rule Name | Source | Destination | Port | Action | Purpose |
+|-----------|--------|-------------|------|--------|---------|
+| Allow-App-To-DB | App Subnet | DB Subnet | 1433 | Allow | SQL access |
 
-| Layer | Technology |
-|---|---|
-| Frontend | Angular.js, TypeScript |
-| Backend APIs | .NET (REST APIs) |
-| Backend Processing | .NET, SSIS (SQL Server Integration Services) |
-| Databases | SQL Server 2019 |
-| Messaging | IBM MQ |
-| File Transfer | FTPS (Secured FTP) |
-| API Gateway | Azure API Management |
-| HR / Payroll | SAP (PSP) |
-| Agency Workforce | JoinedUp (SaaS) |
-| Fleet Management | AssetWorks (M5) |
-| Access Control | Honeywell (Winpak) |
-| Master Data | Teradata (MDM) |
-| Data Platform | Google Cloud Platform (GCP) |
-| Reporting / BI | Qlik Sense |
-| Email | Microsoft Exchange |
-| Architecture Modeling | LikeC4 (C4 DSL) |
+### 8.6 Network / Subnet Design
 
----
+| Subnet | CIDR | Purpose |
+|--------|------|---------|
+| AzureFirewallSubnet | /26 | Firewall |
+| AppSubnet | /24 | App tier |
+| DBSubnet | /24 | Database |
 
-## Data & Storage
+### 8.7 Patterns / Blueprints
+Consumption across: Networking, Security, Compute, Data, Integration
 
-### Data Flows In
-
-| Source | Transport | Data |
-|---|---|---|
-| PSP (SAP) | IBM MQ | Absences, overtime shift status |
-| PSP (SAP) | FTPS | HR master data |
-| Barcode Scanners (PDA/Console) | IBM MQ | Employee attendance records |
-| M5 Fleet | FTPS | Fleet/vehicle data |
-| Winpak | FTPS | ID card / access control data |
-| MDM | FTPS | Master data |
-| JoinedUp | REST API | Agency worker information |
-
-### Data Flows Out
-
-| Destination | Transport | Data |
-|---|---|---|
-| PSP (SAP) | IBM MQ | Approved overtime and SA shifts (for payroll) |
-| Data Platform (GCP) | IBM MQ / FTPS | Operational data for analytics |
-| Reporting (Qlik) | via Data Platform | Dashboards and reports |
-| Delivery System Apps | Azure APIM | Duty data (DDS Legacy, DDS MARS, MDS) |
-| People App | Azure APIM | Approved overtime shifts |
-| JoinedUp | REST API | Approved agency shifts (for payment) |
+### 8.8 Cost Optimisation and FinOps Alignment
+- Reserved capacity usage
+- Right-sizing compute resources
+- PaaS over IaaS where appropriate
+- Costs derived from Azure Calculator
+- DR costs included
 
 ---
 
-## Architecture Diagrams
+## 9. Security Architecture
 
-Diagrams are generated from the LikeC4 model source files:
+### Core Security Objectives (CIA Triad)
+- **Confidentiality**: End-to-end encryption, robust IAM
+- **Integrity**: Strict authorization, data classification
+- **Availability**: Services remain accessible during disruptions
 
-| File | Purpose |
-|---|---|
-| [model.c4](model.c4) | Full architecture model — all elements and relationships |
-| [views.c4](views.c4) | View definitions (Context, Container, Components, Landscape) |
-| [elements-specs.c4](elements-specs.c4) | Element type styles and notations |
-| [relationships-specs.c4](relationships-specs.c4) | Relationship type definitions |
-| [use-cases/usecase.01-approve-overtime.c4](use-cases/usecase.01-approve-overtime.c4) | Dynamic sequence view: Approve Overtime |
+### 9.1 Cyber Architecture Standards Attestation
+23+ questions covering:
+- ISS-001: Cloud Computing Security
+- ISS-002: Cryptography Standard
+- ISS-003: Data Backup and Restoration
+- ISS-004: Asset Management
+- ISS-005: Information Classification
+- ISS-007: Risk Management
+- ISS-009: Network Security
+- ISS-010: Vulnerability Management
+- ISS-013: Authentication Standard
+- ISS-014: Secure Product Development
+- ISS-015: Cyber Security Testing
+- ISS-017: Secret & Key Management
+- ISS-020: SIEM System Monitoring
+- ISS-023: Threat Intelligence
 
-### Rendered Diagram Images
+### 9.2 Data Flow Diagram / Threat Modelling
+### 9.3 STRIDE Mitigation
 
-| Diagram | Description |
-|---|---|
-| [context.png](diagrams/context.png) | System Context (C1) |
-| [container.png](diagrams/container.png) | Container Diagram (C2) |
-| [backendcomponents.png](diagrams/backendcomponents.png) | Backend Components (C3) |
-| [index.png](diagrams/index.png) | Full System Landscape |
-| [fds.png](diagrams/fds.png) | FDS Container Detail |
+| STRIDE | Issue | Mitigation |
+|--------|-------|------------|
+| Spoofing | User/Service identity impersonation | WAF, APIM Security Policies, RBAC, MQ Auth |
+| Tampering | API payload/file modification | TLS Encryption, Input Validation, Checksums |
+| Repudiation | User/admin denial of actions | Audit Logging, SIEM Monitoring |
+| Information Disclosure | PII/HR data exposure | TLS, Encryption at Rest, Azure Key Vault, RBAC |
+| Denial of Service | Traffic flooding | WAF, Rate limiting, SIEM Monitoring |
 
-To regenerate diagrams, run:
+### 9.4 Identity & Access Management (IAM)
+- RBAC (Role-Based Access Control)
+- MFA (Multi-factor Authentication)
+- User Access Matrix, Groups, Roles, Permissions
+- CyberArk (Privileged Access)
+- SailPoint (User Provisioning)
 
-```bash
-npm install
-npx likec4 build
-```
+### 9.5 Usage of AI (If Applicable)
+- Purpose of AI (Use Case)
+- Approved use of AI
+- Securing the AI
+
+### 9.6 Security RAID Log
+### 9.7 Application Business Criticality Rating
+### 9.8-9.12: Quantum Cryptography, Active Directory Tier, Key Management
+
+---
+
+## 10. Data Architecture
+
+### Core Components
+- **Data Models**: Blueprints mapping data structures, relationships, business rules
+- **Data Flow & Pipelines**: Ingest, process, move data
+- **Data Storage**: Data Lakes, Warehouses, Lakehouses
+- **Data Governance & Security**: Policies, standards, access controls
+
+### 10.1 Data Architecture Blueprint
+- Conceptual Data Models
+- Data Flow Diagrams
+- Storage Strategies
+
+### 10.2 Integration and Processing
+- Integration Patterns (ETL/ELT, batch, real-time streaming)
+- Data Sources and Destinations
+- Integration Methods
+
+### 10.3 Ownership Model
+
+| Interface | Owner | Steward | Consumer |
+|-----------|-------|---------|----------|
+
+### 10.4 Policies
+
+| Data Classification | Data Categorization | Retention Policy | Compliance |
+|---------------------|---------------------|------------------|------------|
+
+### 10.5-10.12 Data Product Architecture
+- Purpose / business use case
+- Product owner (business + technical)
+- Consumers (teams, applications)
+- Value statement
+- Data product boundaries
+- Event-driven / batch flows
+
+---
+
+## 11. Cross-cutting Concepts
+
+Examples of cross-cutting concepts to document:
+
+- Identity, Authentication and Authorisation
+- Audit and Traceability
+- Integration Resilience
+- Data Privacy and Retention
+- Logging, Monitoring and Observability
+- User-experience consistency
+
+> **Note**: Do not attempt to cover all possible topics. Pick only the most-needed for your system.
+
+---
+
+## 12. Architecture Decisions
+
+Document important, expensive, large-scale, or risky architecture decisions.
+
+### ADR Template
+
+| Aspect | Detail |
+|--------|--------|
+| Status | Accepted/Rejected/Proposed |
+| Context | Decision background |
+| Decision | What was decided |
+| Consequences | Impact of the decision |
+
+---
+
+## 13. Quality Requirements
+
+### 13.1 Quality Requirements Overview
+
+| Category (ISO 25010) | Quality Requirement |
+|----------------------|---------------------|
+| Functional Suitability | |
+| Performance Efficiency | |
+| Compatibility | |
+| Usability | |
+| Reliability | |
+| Security | |
+| Maintainability | |
+
+### 13.2 Quality Scenarios (selected)
+
+**Key principle**: Quality scenarios make NFRs testable and measurable.
+
+| NFR (Not testable) | Quality Scenario (Testable) |
+|--------------------|----------------------------|
+| All PII data should be encrypted at rest | All PII data should be encrypted using AES256 before storing in the database |
+| All save operations should be complete in less than 5 seconds | Upon clicking Save button, record should be saved within 3 seconds and success message displayed |
+
+---
+
+## 14. RAID Log and Technical Debts
+
+| ID | Type | Risk / Debt | Level | Mitigation |
+|----|------|-------------|-------|-------------|
+| | Risk/Issue/Debt | Description | High/Med/Low | Action plan |
+
+> **Quote**: *"Risk management is project management for grown-ups"* — Tim Lister, Atlantic Systems Guild
+
+---
+
+## 15. Glossary
+
+| Term | Definition |
+|------|-------------|
+| FDS | Front Line Demand & Supply |
+| RMG | Royal Mail Group |
+| HLD | High-Level Design |
+| C4 Model | Context, Container, Component, Code model |
+| STRIDE | Spoofing, Tampering, Repudiation, Information Disclosure, Denial of Service, Elevation of Privilege |
+| WAF | Web Application Firewall |
+| APIM | API Management |
+| RBAC | Role-Based Access Control |
+| NSG | Network Security Group |
+| CIDR | Classless Inter-Domain Routing |
+| DR | Disaster Recovery |
+| NFR | Non-Functional Requirement |
+| RAID | Risks, Assumptions, Issues, Dependencies |
+
+---
+
+## 📎 References
+
+- arc42 Documentation: [https://arc42.org/](https://arc42.org/)
+- C4 Model: [https://c4model.com/](https://c4model.com/)
+- ISO 25010:2023 Quality Model
+- Royal Mail Cyber Architecture Standards (LeanIX)
+
+---
+
+## 📝 Document Control
+
+| Field | Value |
+|-------|-------|
+| Document Title | HLD - Front Line Demand & Supply (FDS) |
+| Version | v0.1 |
+| Status | Draft |
+| Author | TBD |
+| Document Owner | TBD |
+| Classification | Template for Internal Use |
+| Source Requirements | Template |
