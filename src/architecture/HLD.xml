@@ -528,31 +528,136 @@ for both Prod and DR (Pre-Prod)</emphasis></simpara>
 </tgroup>
 </informaltable>
 </section>
-<section xml:id="_quality_and_performance_features">
-<title>Quality and performance features:</title>
-
-</section>
 <section xml:id="_target_infrastructure_architecture">
 <title>Target Infrastructure Architecture</title>
 <section xml:id="_platforms_summary">
 <title>Platforms Summary</title>
-
+<table frame="all" rowsep="1" colsep="1">
+<title>Platform Summary</title>
+<?dbhtml table-width="100%"?>
+<?dbfo table-width="100%"?>
+<?dblatex table-width="100%"?>
+<tgroup cols="3">
+<colspec colname="col_1" colwidth="85*"/>
+<colspec colname="col_2" colwidth="170*"/>
+<colspec colname="col_3" colwidth="170*"/>
+<thead>
+<row>
+<entry align="left" valign="top"><emphasis role="strong">Platform</emphasis></entry>
+<entry align="left" valign="top"><emphasis role="strong">Purpose</emphasis></entry>
+<entry align="left" valign="top"><emphasis role="strong">Relevance</emphasis></entry>
+</row>
+</thead>
+<tbody>
+<row>
+<entry align="left" valign="top"></entry>
+<entry align="left" valign="top"></entry>
+<entry align="left" valign="top"></entry>
+</row>
+</tbody>
+</tgroup>
+</table>
 </section>
 <section xml:id="_load_balancers">
 <title>Load Balancers</title>
+<section xml:id="_local_traffic_manager_ltm">
+<title>Local Traffic Manager (LTM)</title>
 
+</section>
+<section xml:id="_global_traffic_manager_gtm">
+<title>Global Traffic Manager (GTM)</title>
+
+</section>
 </section>
 <section xml:id="_it_infrastructure_landscape_view">
 <title>IT Infrastructure Landscape View</title>
 
 </section>
-<section xml:id="_physical_compute">
-<title>Physical Compute</title>
-
+<section xml:id="_compute_physical_virtual_container">
+<title>Compute (Physical / Virtual / Container)</title>
+<table frame="all" rowsep="1" colsep="1">
+<title>Compute (Physical / Virtual / Container)</title>
+<?dbhtml table-width="100%"?>
+<?dbfo table-width="100%"?>
+<?dblatex table-width="100%"?>
+<tgroup cols="8">
+<colspec colname="col_1" colwidth="63.75*"/>
+<colspec colname="col_2" colwidth="63.75*"/>
+<colspec colname="col_3" colwidth="63.75*"/>
+<colspec colname="col_4" colwidth="42.5*"/>
+<colspec colname="col_5" colwidth="42.5*"/>
+<colspec colname="col_6" colwidth="42.5*"/>
+<colspec colname="col_7" colwidth="42.5*"/>
+<colspec colname="col_8" colwidth="63.75*"/>
+<thead>
+<row>
+<entry align="left" valign="top"><emphasis role="strong">Host</emphasis></entry>
+<entry align="left" valign="top"><emphasis role="strong">App</emphasis></entry>
+<entry align="left" valign="top"><emphasis role="strong">OS</emphasis></entry>
+<entry align="left" valign="top"><emphasis role="strong">CPU</emphasis></entry>
+<entry align="left" valign="top"><emphasis role="strong">Mem</emphasis></entry>
+<entry align="left" valign="top"><emphasis role="strong">Disk</emphasis></entry>
+<entry align="left" valign="top"><emphasis role="strong">DC</emphasis></entry>
+<entry align="left" valign="top"><emphasis role="strong">Type</emphasis></entry>
+</row>
+</thead>
+<tbody>
+<row>
+<entry align="left" valign="top"></entry>
+<entry align="left" valign="top"></entry>
+<entry align="left" valign="top"></entry>
+<entry align="left" valign="top"></entry>
+<entry align="left" valign="top"></entry>
+<entry align="left" valign="top"></entry>
+<entry align="left" valign="top"></entry>
+<entry align="left" valign="top"></entry>
+</row>
+</tbody>
+</tgroup>
+</table>
 </section>
 <section xml:id="_databases">
 <title>Databases</title>
-
+<table frame="all" rowsep="1" colsep="1">
+<title>Database Servers (Physical / Virtual)</title>
+<?dbhtml table-width="100%"?>
+<?dbfo table-width="100%"?>
+<?dblatex table-width="100%"?>
+<tgroup cols="8">
+<colspec colname="col_1" colwidth="63.75*"/>
+<colspec colname="col_2" colwidth="63.75*"/>
+<colspec colname="col_3" colwidth="63.75*"/>
+<colspec colname="col_4" colwidth="42.5*"/>
+<colspec colname="col_5" colwidth="42.5*"/>
+<colspec colname="col_6" colwidth="42.5*"/>
+<colspec colname="col_7" colwidth="42.5*"/>
+<colspec colname="col_8" colwidth="63.75*"/>
+<thead>
+<row>
+<entry align="left" valign="top"><emphasis role="strong">Host</emphasis></entry>
+<entry align="left" valign="top"><emphasis role="strong">DB</emphasis></entry>
+<entry align="left" valign="top"><emphasis role="strong">OS</emphasis></entry>
+<entry align="left" valign="top"><emphasis role="strong">CPU</emphasis></entry>
+<entry align="left" valign="top"><emphasis role="strong">Mem</emphasis></entry>
+<entry align="left" valign="top"><emphasis role="strong">Disk</emphasis></entry>
+<entry align="left" valign="top"><emphasis role="strong">DC</emphasis></entry>
+<entry align="left" valign="top"><emphasis role="strong">Type</emphasis></entry>
+</row>
+</thead>
+<tbody>
+<row>
+<entry align="left" valign="top"></entry>
+<entry align="left" valign="top"></entry>
+<entry align="left" valign="top"></entry>
+<entry align="left" valign="top"></entry>
+<entry align="left" valign="top"></entry>
+<entry align="left" valign="top"></entry>
+<entry align="left" valign="top"></entry>
+<entry align="left" valign="top"></entry>
+</row>
+</tbody>
+</tgroup>
+</table>
 </section>
 <section xml:id="_high_available_cluster">
 <title>High Available Cluster</title>
@@ -564,15 +669,34 @@ for both Prod and DR (Pre-Prod)</emphasis></simpara>
 </section>
 <section xml:id="_network">
 <title>Network</title>
-
+<section xml:id="_network_protocols">
+<title>Network Protocols</title>
+<table frame="all" rowsep="1" colsep="1">
+<title>Network Protocols</title>
+<?dbhtml table-width="100%"?>
+<?dbfo table-width="100%"?>
+<?dblatex table-width="100%"?>
+<tgroup cols="3">
+<colspec colname="col_1" colwidth="85*"/>
+<colspec colname="col_2" colwidth="170*"/>
+<colspec colname="col_3" colwidth="170*"/>
+<thead>
+<row>
+<entry align="left" valign="top"><emphasis role="strong">Protocol</emphasis></entry>
+<entry align="left" valign="top"><emphasis role="strong">Purpose</emphasis></entry>
+<entry align="left" valign="top"><emphasis role="strong">EndPoints</emphasis></entry>
+</row>
+</thead>
+<tbody>
+<row>
+<entry align="left" valign="top"></entry>
+<entry align="left" valign="top"></entry>
+<entry align="left" valign="top"></entry>
+</row>
+</tbody>
+</tgroup>
+</table>
 </section>
-<section xml:id="_local_traffic_manager_ltm">
-<title>Local Traffic Manager (LTM)</title>
-
-</section>
-<section xml:id="_global_traffic_manager_gtm">
-<title>Global Traffic Manager (GTM)</title>
-
 </section>
 <section xml:id="_firewall_rules_north_south_east_west">
 <title>Firewall Rules (North-South / East-West)</title>

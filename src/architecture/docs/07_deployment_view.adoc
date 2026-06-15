@@ -103,7 +103,7 @@ _See_ https://docs.arc42.org/section-7/[Deployment View] _in the arc42 documenta
 [width="100%",cols="15%,15%,15%,10,10,10,10,15",options="header",]
 |===
 |*Host* |*DB* |*OS* |*CPU* |*Mem* |*Disk* |*DC* |*Type*
-|       |       |       |      |      |      |
+|       |       |       |      |      |      |      |
 |===   
 
 ===== High Available Cluster
